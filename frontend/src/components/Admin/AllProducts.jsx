@@ -28,6 +28,14 @@ const AllProducts = () => {
       minWidth: 180,
       flex: 1.4,
     },
+
+    {
+      field: "namaToko",
+      headerName: "Nama Toko",
+      minWidth: 180,
+      flex: 1.4,
+    },
+
     {
       field: "price",
       headerName: "Price",
@@ -77,7 +85,8 @@ const AllProducts = () => {
       row.push({
         id: item._id,
         name: item.name,
-        price: "US$ " + item.discountPrice,
+        namaToko: item.shop.name,
+        price: "Rp " + item.discountPrice,
         Stock: item.stock,
         sold: item?.sold_out,
       });

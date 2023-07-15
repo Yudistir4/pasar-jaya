@@ -1,32 +1,35 @@
 const express = require("express");
 const router = express.Router();
-const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const midtransClient = require("midtrans-client");
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+router.post("/process", (req, res) => {
+  try {
+    const snap = new midtransClient.Snap({
+      isProduction: false,
+      serverKey: "SB-Mid-server-Q7FpGCUUPpJ7SLvwjB37ojav",
+      clientKey: "SB-Mid-client-T3JHYEKPeiE7Cd3y"
+    })
 
-router.post(
-  "/process",
-  catchAsyncErrors(async (req, res, next) => {
-    const myPayment = await stripe.paymentIntents.create({
-      amount: req.body.amount,
-      currency: "inr",
-      metadata: {
-        company: "Becodemy",
-      },
-    });
-    res.status(200).json({
-      success: true,
-      client_secret: myPayment.client_secret,
-    });
-  })
-);
+    const parameter = {
+      transaction_details: {
+        order_id: req.body.order_id,
+        gross_amount: req.body.amount,
+      }
+    }
 
-router.get(
-  "/stripeapikey",
-  catchAsyncErrors(async (req, res, next) => {
-    res.status(200).json({ stripeApikey: process.env.STRIPE_API_KEY });
-  })
-);
+    snap.createTransaction(parameter).then((transaction) => {
+      const dataPayment = {
+        response: JSON.stringify(transaction)
+      }
+      
+      const token = transaction.token
 
+      res.status(200).json({message: "berhasil", dataPayment, token: token})
+    })
+
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
 
 module.exports = router;

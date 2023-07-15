@@ -152,7 +152,7 @@ const ProductDetails = ({ data }) => {
                 <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discountPrice}$
+                    Rp {data.discountPrice}
                   </h4>
                   <h3 className={`${styles.price}`}>
                     {data.originalPrice ? "Rp " + data.originalPrice: null}
@@ -202,7 +202,7 @@ const ProductDetails = ({ data }) => {
                   onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center">
-                    Add to cart <AiOutlineShoppingCart className="ml-1" />
+                    Tambah <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
                 <div className="flex items-center pt-8">
@@ -228,7 +228,7 @@ const ProductDetails = ({ data }) => {
                     onClick={handleMessageSubmit}
                   >
                     <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
+                      Hubungi Penjual <AiOutlineMessage className="ml-1" />
                     </span>
                   </div>
                 </div>

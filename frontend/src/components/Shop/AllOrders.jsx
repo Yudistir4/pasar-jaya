@@ -21,6 +21,14 @@ const AllOrders = () => {
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 
     {
+      field: "namaProduk",
+      headerName: "Nama Produk",
+      type: "string",
+      minWidth: 130,
+      flex: 0.8,
+    },
+
+    {
       field: "status",
       headerName: "Status",
       minWidth: 130,
@@ -74,8 +82,9 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
+        namaProduk: item.cart[0].name,
         itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        total: "Rp " + item.totalPrice,
         status: item.status,
       });
     });
