@@ -26,8 +26,13 @@ const Login = () => {
       )
       .then((res) => {
         toast.success("Login Success!");
-        navigate("/");
-        window.location.reload(true); 
+        if (email === "admin@gmail.com") {
+          navigate("/admin/dashboard")
+          window.location.reload(true);
+        } else {
+          navigate("/");
+          window.location.reload(true);
+        }
       })
       .catch((err) => {
         toast.error(err.response.data.message);
