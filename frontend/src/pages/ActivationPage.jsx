@@ -41,7 +41,7 @@ const ActivationPage = () => {
       ) : (
         <div>
         <p>Your account has been created suceessfully!</p>
-        <a href={`${server}`}>Back to home</a>
+        <a href={`http://localhost:3000/login`}>Back to home</a>
         </div>
       )}
     </div>
