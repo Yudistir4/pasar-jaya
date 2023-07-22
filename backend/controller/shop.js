@@ -1,15 +1,14 @@
 const express = require("express");
 const path = require("path");
+const Shop = require("../model/shop");
 const router = express.Router();
+const { upload } = require("../multer");
+const ErrorHandler = require("../utils/ErrorHandler");
+const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
-const sendToken = require("../utils/jwtToken");
-const Shop = require("../model/shop");
 const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
-const { upload } = require("../multer");
-const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
 
 // create shop
@@ -44,7 +43,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
 
     const activationToken = createActivationToken(seller);
 
-    const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
+    const activationUrl = `http://localhost:3000/seller-activation/${activationToken}`;
 
     try {
       await sendMail({
@@ -73,7 +72,7 @@ const createActivationToken = (seller) => {
 
 // activate user
 router.post(
-  "/activation",
+  "/seller-activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { activation_token } = req.body;
@@ -104,6 +103,8 @@ router.post(
         address,
         phoneNumber,
       });
+
+      console.log("ini seller", seller);
 
       sendShopToken(seller, 201, res);
     } catch (error) {

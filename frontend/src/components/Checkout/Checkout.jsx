@@ -17,44 +17,73 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
+  const [token, setToken] = useState("");
   const navigate = useNavigate();
+  const [orderData, setOrderData] = useState([]);
+
+  console.log("token di checkout", token);
+
+
+  useEffect(() => {
+    const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    setOrderData(orderData);
+  }, []);
+
+  const subTotalPrice = cart.reduce(
+    (acc, item) => acc + item.qty * item.discountPrice,
+    0
+  );
+
+  const processPayment = async () => {
+    const data = {
+      order_id: "1",
+      total: subTotalPrice
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    const response = await axios.post(`${server}/payment/process-transaction`, data, config)
+
+    console.log("responnya nih ", response);
+    setToken(response.data.token)
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const paymentSubmit = () => {
-   if(address1 === "" || address2 === "" || zipCode === null){
+    if (address1 === "" || address2 === "" || zipCode === null) {
       toast.error("Please choose your delivery address!")
-   } else{
-    const shippingAddress = {
-      address1,
-      address2,
-      zipCode,
-    };
+    } else {
+      const shippingAddress = {
+        address1,
+        address2,
+        zipCode,
+      };
 
-    const orderData = {
-      cart,
-      totalPrice,
-      subTotalPrice,
-      shipping,
-      discountPrice,
-      shippingAddress,
-      user,
+      const orderData = {
+        cart,
+        totalPrice,
+        subTotalPrice,
+        shipping,
+        discountPrice,
+        shippingAddress,
+        user,
+      }
+
+      // update local storage with the updated orders array
+      localStorage.setItem("latestOrder", JSON.stringify(orderData));
+      localStorage.setItem("tokenPayment", JSON.stringify(token))
+      navigate("/payment");
     }
 
-    // update local storage with the updated orders array
-    localStorage.setItem("latestOrder", JSON.stringify(orderData));
-    navigate("/payment");
-   }
-
-  // alert("payment in construction")
+    // alert("payment in construction")
   };
-
-  const subTotalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.discountPrice,
-    0
-  );
 
   // this is shipping cost variable
   const shipping = subTotalPrice * 0.1;
@@ -127,12 +156,24 @@ const Checkout = () => {
           />
         </div>
       </div>
-      <div
-        className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
-        onClick={paymentSubmit}
-      >
-        <h5 className="text-white">Go to Payment</h5>
-      </div>
+      {
+        token ? (
+          <div
+            className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
+            onClick={paymentSubmit}
+          >
+            <h5 className="text-white">Menuju ke Pembayaran</h5>
+          </div>
+        ) : (
+          <div
+          className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
+          onClick={processPayment}
+        >
+          <h5 className="text-white">Simpan Pesanan</h5>
+        </div>
+        )
+      }
+
     </div>
   );
 };
@@ -242,7 +283,7 @@ const ShippingInfo = ({
               <option className="block pb-2" value="">
                 Ambil di Toko
               </option>
-              
+
             </select>
           </div>
         </div>
