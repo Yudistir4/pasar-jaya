@@ -62,7 +62,7 @@ const DashboardHero = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/dashboard/order/${params.id}`}>
+            <Link to={`/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -98,7 +98,6 @@ const DashboardHero = () => {
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
               Saldo Rekening{" "}
-              <span className="text-[16px]">(dengan biaya layanan 10%.)</span>
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">Rp {availableBalance}</h5>

@@ -27,7 +27,7 @@ const AdminDashboardMain = () => {
    const adminBalance = adminEarning?.toFixed(2);
 
   const columns = [
-    { field: "id", headerName: "ID Pesana", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "ID Pesanan", minWidth: 150, flex: 0.7 },
 
     {
       field: "status",
@@ -126,12 +126,12 @@ const AdminDashboardMain = () => {
               <h3
                 className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
               >
-                Semua Orderan
+                Semua Pesanan
               </h3>
             </div>
             <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{adminOrders && adminOrders.length}</h5>
             <Link to="/admin-orders">
-              <h5 className="pt-4 pl-2 text-[#077f9c]">Lihat orderan</h5>
+              <h5 className="pt-4 pl-2 text-[#077f9c]">Lihat pesanan</h5>
             </Link>
           </div>
         </div>

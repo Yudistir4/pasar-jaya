@@ -76,7 +76,7 @@ const AllCoupons = () => {
     { field: "id", headerName: "Id", minWidth: 150, flex: 0.7 },
     {
       field: "name",
-      headerName: "Kode Promo",
+      headerName: "Kode Voucher",
       minWidth: 180,
       flex: 1.4,
     },
@@ -128,7 +128,7 @@ const AllCoupons = () => {
               className={`${styles.button} !w-max !h-[45px] px-3 !rounded-[5px] mr-3 mb-3`}
               onClick={() => setOpen(true)}
             >
-              <span className="text-white">Buat kode promo</span>
+              <span className="text-white">Buat Voucher</span>
             </div>
           </div>
           <DataGrid
@@ -149,7 +149,7 @@ const AllCoupons = () => {
                   />
                 </div>
                 <h5 className="text-[30px] font-Poppins text-center">
-                  Buat kode promo
+                  Buat kode voucher
                 </h5>
                 {/* create coupoun code */}
                 <form onSubmit={handleSubmit} aria-required={true}>
@@ -171,7 +171,7 @@ const AllCoupons = () => {
                   <br />
                   <div>
                     <label className="pb-2">
-                      Persentasi promo{" "}
+                      Persentasi voucher{" "}
                       <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -198,7 +198,7 @@ const AllCoupons = () => {
                   </div>
                   <br />
                   <div>
-                    <label className="pb-2">Jumlah Maximum</label>
+                    <label className="pb-2">Jumlah Maksimum</label>
                     <input
                       type="number"
                       name="value"
@@ -231,7 +231,7 @@ const AllCoupons = () => {
                   <div>
                     <input
                       type="submit"
-                      value="Create"
+                      value="Buat"
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                   </div>

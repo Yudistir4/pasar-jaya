@@ -19,10 +19,10 @@ const Hero = () => {
         <h1
           className={`text-[35px] leading-[1.2] 800px:text-[60px] text-[#eeeeee] font-[600] capitalize `}
         >
-          Pasar Jaya <br /> Kebayoran Lama
+          Pasar Cidodol
         </h1>
         <p className="pt-5 text-[16px] font-[Poppins] font-[400] text-[#dbdbdb]">
-          Tempat berbelanja apapun yang anda butuhkan <br /> Menyediakan mulai dari sandang, pangan, kosmetik, hinggal alat-alat kebutuhan rumah tangg{" "}
+          Tempat berbelanja bahan pangan terbaik <br /> Menyediakan mulai dari sayur segar, buah segar, protein, hingga bumbu dapur{" "}
           <br /> 
         </p>
         <Link to="/products" className="inline-block">

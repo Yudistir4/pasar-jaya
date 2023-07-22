@@ -83,7 +83,7 @@ const CreateEvent = () => {
 
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
-      <h5 className="text-[30px] font-Poppins text-center">Buat Acara</h5>
+      <h5 className="text-[30px] font-Poppins text-center">Buat Promo</h5>
       {/* create event form */}
       <form onSubmit={handleSubmit}>
         <br />
@@ -127,7 +127,7 @@ const CreateEvent = () => {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="Choose a category">Choose a category</option>
+            <option value="Choose a category">Pilih Kategori</option>
             {categoriesData &&
               categoriesData.map((i) => (
                 <option value={i.title} key={i.title}>
@@ -191,7 +191,7 @@ const CreateEvent = () => {
         <br />
         <div>
           <label className="pb-2">
-            Mulai acara <span className="text-red-500">*</span>
+            Mulai Promo <span className="text-red-500">*</span>
           </label>
           <input
             type="date"
@@ -207,7 +207,7 @@ const CreateEvent = () => {
         <br />
         <div>
           <label className="pb-2">
-            Akhir acara <span className="text-red-500">*</span>
+            Akhir Promo <span className="text-red-500">*</span>
           </label>
           <input
             type="date"

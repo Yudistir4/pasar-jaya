@@ -12,7 +12,7 @@ const Events = () => {
       !isLoading && (
         <div className={`${styles.section}`}>
       <div className={`${styles.heading}`}>
-        <h1>Berbagai Acara</h1>
+        <h1>Promo Menarik</h1>
       </div>
 
       <div className="w-full grid">
