@@ -10,13 +10,51 @@ import { RxCross1 } from "react-icons/rx";
 
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
+  const [token, setToken] = useState("");
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
+  const handleOpenPayment = () => {
+    const midtransUrl = "https://app.sandbox.midtrans.com/snap/snap.js"
+
+    let scriptTag = document.createElement("script")
+    scriptTag.src = midtransUrl
+
+    const midtransClientKey = "SB-Mid-client-T3JHYEKPeiE7Cd3y";
+    scriptTag.setAttribute("data-client-key",midtransClientKey);
+    document.body.appendChild(scriptTag)
+    
+    if (token) {
+      window.snap.pay(token, {
+        onSuccess: (result) => {
+          localStorage.setItem("Pembayaran", JSON.stringify(result))
+          setToken("")
+        },
+        onPending: (result) => {
+          localStorage.setItem("Pembayaran", JSON.stringify(result))
+          setToken("")
+        },
+        onError: (error) => {
+          console.log(error)
+          setToken("")
+        },
+        onClose: (result) => {
+          console.log("Anda belum menyelesaikan pembayaran")
+          setToken("")
+        },
+      })
+    }
+    return () => {
+      document.body.removeChild(scriptTag)
+    }
+  }
+
   useEffect(() => {
     const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    const token = JSON.parse(localStorage.getItem("tokenPayment"));
     setOrderData(orderData);
+    setToken(token);
   }, []);
 
   const createOrder = (data, actions) => {
@@ -26,7 +64,7 @@ const Payment = () => {
           {
             description: "Sunflower",
             amount: {
-              currency_code: "USD",
+              currency_code: "IDR",
               value: orderData?.totalPrice,
             },
           },
@@ -91,22 +129,22 @@ const Payment = () => {
     amount: Math.round(orderData?.totalPrice * 100),
   };
 
-  const paymentHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+  // const paymentHandler = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     };
 
-      const { data } = await axios.post(
-        `${server}/payment/process`,
-        paymentData,
-        config
-      );
+  //     const { data } = await axios.post(
+  //       `${server}/payment/process`,
+  //       paymentData,
+  //       config
+  //     );
 
-      const client_secret = data.client_secret;
+  //     const client_secret = data.client_secret;
 
       // if (!stripe || !elements) return;
       // const result = await stripe.confirmCardPayment(client_secret, {
@@ -137,10 +175,10 @@ const Payment = () => {
       //       });
       //   }
       // }
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
@@ -177,7 +215,8 @@ const Payment = () => {
             setOpen={setOpen}
             onApprove={onApprove}
             createOrder={createOrder}
-            paymentHandler={paymentHandler}
+            handleOpenPayment={handleOpenPayment}
+            // paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
           />
         </div>
@@ -196,6 +235,7 @@ const PaymentInfo = ({
   onApprove,
   createOrder,
   paymentHandler,
+  handleOpenPayment,
   cashOnDeliveryHandler,
 }) => {
   const [select, setSelect] = useState(1);
@@ -313,8 +353,8 @@ const PaymentInfo = ({
       </div> */}
 
       <br />
-      {/* paypal payment */}
-      {/* <div>
+      {/* BCA VA payment */}
+      <div>
         <div className="flex w-full pb-5 border-b mb-2">
           <div
             className="w-[25px] h-[25px] rounded-full bg-transparent border-[3px] border-[#1d1a1ab4] relative flex items-center justify-center"
@@ -325,18 +365,18 @@ const PaymentInfo = ({
             ) : null}
           </div>
           <h4 className="text-[18px] pl-2 font-[600] text-[#000000b1]">
-            Pay with Paypal
+            BCA Virtual Account
           </h4>
-        </div> */}
+        </div>
 
         {/* pay with payement */}
-        {/* {select === 2 ? (
+        {select === 2 ? (
           <div className="w-full flex border-b">
             <div
               className={`${styles.button} !bg-[#f63b60] text-white h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
-              onClick={() => setOpen(true)}
+              onClick={handleOpenPayment}
             >
-              Pay Now
+              Bayar Sekarang
             </div>
             {open && (
               <div className="w-full fixed top-0 left-0 bg-[#00000039] h-screen flex items-center justify-center z-[99999]">
@@ -348,7 +388,7 @@ const PaymentInfo = ({
                       onClick={() => setOpen(false)}
                     />
                   </div>
-                    <PayPalScriptProvider
+                    {/* <PayPalScriptProvider
                       options={{
                         "client-id":
                           "Aczac4Ry9_QA1t4c7TKH9UusH3RTe6onyICPoCToHG10kjlNdI-qwobbW9JAHzaRQwFMn2-k660853jn",
@@ -359,13 +399,13 @@ const PaymentInfo = ({
                         onApprove={onApprove}
                         createOrder={createOrder}
                       />
-                    </PayPalScriptProvider>
+                    </PayPalScriptProvider> */}
                 </div>
               </div>
             )}
           </div>
         ) : null}
-      </div> */}
+      </div>
 
       <br />
       {/* cash on delivery */}
@@ -407,12 +447,7 @@ const CartData = ({ orderData }) => {
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">${orderData?.subTotalPrice}</h5>
-      </div>
-      <br />
-      <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>
-        <h5 className="text-[18px] font-[600]">${shipping}</h5>
+        <h5 className="text-[18px] font-[600]">Rp {orderData?.subTotalPrice}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">

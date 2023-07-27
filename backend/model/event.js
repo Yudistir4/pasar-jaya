@@ -21,7 +21,7 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         required: true,
       },
-      status: {
+    status: {
         type: String,
         default: "Running",
       },
