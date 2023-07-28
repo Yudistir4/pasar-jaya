@@ -5,10 +5,10 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-
+console.log(process.env.ORIGIN);
 app.use(
   cors({
-    origin: process.env.ORIGIN,
+    // origin: 'http://localhost:3000',
     credentials: true,
   })
 );
