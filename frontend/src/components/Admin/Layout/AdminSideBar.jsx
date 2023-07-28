@@ -11,15 +11,27 @@ import { AiOutlineSetting } from 'react-icons/ai';
 import axios from 'axios';
 import { server } from '../../../server';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { resetCart } from '../../../redux/actions/cart';
+import { resetWishlist } from '../../../redux/actions/wishlist';
 
 const AdminSideBar = ({ active }) => {
   // const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const resetCartHandler = () => {
+    dispatch(resetCart());
+  };
+  const resetWishlistHandler = () => {
+    dispatch(resetWishlist());
+  };
   const logoutHandler = () => {
     axios
       .get(`${server}/user/logout`, { withCredentials: true })
       .then((res) => {
         toast.success(res.data.message);
+        resetCartHandler();
+        resetWishlistHandler();
         window.location.reload(true);
         navigate('/login');
       })

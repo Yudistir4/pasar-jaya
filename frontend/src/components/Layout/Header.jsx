@@ -17,6 +17,7 @@ import { backend_url } from '../../server';
 import Cart from '../cart/Cart';
 import Wishlist from '../Wishlist/Wishlist';
 import { RxCross1 } from 'react-icons/rx';
+import logo from '../../Assests/image/logo.png';
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -62,7 +63,7 @@ const Header = ({ activeHeading }) => {
                 className="ml-2"
                 width="110px"
                 height="110px"
-                src="https://mail3.pasarjaya.co.id/frontend/assets/img/logo/logo.png"
+                src={logo}
                 alt=""
               />
             </Link>

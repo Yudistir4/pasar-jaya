@@ -1,8 +1,8 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
-  wishlist: localStorage.getItem("wishlistItems")
-    ? JSON.parse(localStorage.getItem("wishlistItems"))
+  wishlist: localStorage.getItem('wishlistItems')
+    ? JSON.parse(localStorage.getItem('wishlistItems'))
     : [],
 };
 
@@ -29,6 +29,12 @@ export const wishlistReducer = createReducer(initialState, {
     return {
       ...state,
       wishlist: state.wishlist.filter((i) => i._id !== action.payload),
+    };
+  },
+  resetWishlist: (state) => {
+    return {
+      ...state,
+      wishlist: [],
     };
   },
 });

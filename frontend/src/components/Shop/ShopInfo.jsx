@@ -7,6 +7,8 @@ import Loader from '../Layout/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProductsShop } from '../../redux/actions/product';
 import { toast } from 'react-toastify';
+import { resetCart } from '../../redux/actions/cart';
+import { resetWishlist } from '../../redux/actions/wishlist';
 
 const ShopInfo = ({ isOwner }) => {
   const [data, setData] = useState({});
@@ -14,6 +16,13 @@ const ShopInfo = ({ isOwner }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  const resetCartHandler = () => {
+    dispatch(resetCart());
+  };
+  const resetWishlistHandler = () => {
+    dispatch(resetWishlist());
+  };
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllProductsShop(id));
@@ -37,6 +46,8 @@ const ShopInfo = ({ isOwner }) => {
       })
       .then((res) => {
         toast.success(res.data.message);
+        resetCartHandler();
+        resetWishlistHandler();
         window.location.reload(true);
         // navigate('/shop-login');
       })

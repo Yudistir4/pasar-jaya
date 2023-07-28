@@ -1,11 +1,7 @@
 import React from 'react';
-import { AiOutlineGift } from 'react-icons/ai';
-import { BiMessageSquareDetail } from 'react-icons/bi';
-import { FiPackage, FiShoppingBag } from 'react-icons/fi';
-import { MdOutlineLocalOffer } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { backend_url } from '../../server';
+import logo from '../../Assests/image/logo.png';
 
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.user);
@@ -18,7 +14,7 @@ const AdminHeader = () => {
             className="ml-2"
             width="110px"
             height="110px"
-            src="https://mail3.pasarjaya.co.id/frontend/assets/img/logo/logo.png"
+            src={logo}
             alt=""
           />
         </Link>

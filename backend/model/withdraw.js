@@ -11,7 +11,7 @@ const withdrawSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: 'Pengemasan',
+    default: 'Pending',
   },
   createdAt: {
     type: Date,

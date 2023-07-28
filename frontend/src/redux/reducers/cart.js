@@ -1,8 +1,8 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
-  cart: localStorage.getItem("cartItems")
-    ? JSON.parse(localStorage.getItem("cartItems"))
+  cart: localStorage.getItem('cartItems')
+    ? JSON.parse(localStorage.getItem('cartItems'))
     : [],
 };
 
@@ -27,6 +27,12 @@ export const cartReducer = createReducer(initialState, {
     return {
       ...state,
       cart: state.cart.filter((i) => i._id !== action.payload),
+    };
+  },
+  resetCart: (state) => {
+    return {
+      ...state,
+      cart: [],
     };
   },
 });
