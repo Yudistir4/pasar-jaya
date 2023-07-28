@@ -32,9 +32,9 @@ const ProfileSidebar = ({ setActive, active }) => {
       .then((res) => {
         toast.success(res.data.message);
         window.location.reload(true);
-        resetCartHandler();
-        resetWishlistHandler();
-        navigate('/login');
+        // resetCartHandler();
+        // resetWishlistHandler();
+        // navigate('/login');
       })
       .catch((error) => {
         console.log(error.response.data.message);
