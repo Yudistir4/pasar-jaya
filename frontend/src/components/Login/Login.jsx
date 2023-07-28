@@ -100,7 +100,7 @@ const Login = () => {
                 )}
               </div>
             </div>
-            <div className={`${styles.noramlFlex} justify-between`}>
+            {/* <div className={`${styles.noramlFlex} justify-between`}>
               <div className={`${styles.noramlFlex}`}>
                 <input
                   type="checkbox"
@@ -123,7 +123,7 @@ const Login = () => {
                   Lupa Password ?
                 </a>
               </div>
-            </div>
+            </div> */}
             <div>
               <button
                 type="submit"

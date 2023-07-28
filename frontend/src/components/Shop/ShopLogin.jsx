@@ -1,15 +1,15 @@
-import { React, useEffect, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../../styles/styles";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { server } from "../../server";
-import { toast } from "react-toastify";
+import { React, useEffect, useState } from 'react';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import styles from '../../styles/styles';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { server } from '../../server';
+import { toast } from 'react-toastify';
 
 const ShopLogin = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -25,9 +25,9 @@ const ShopLogin = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        toast.success("Login Success!");
-        navigate("/dashboard");
-        window.location.reload(true); 
+        toast.success('Login Success!');
+        navigate('/dashboard');
+        window.location.reload(true);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -72,7 +72,7 @@ const ShopLogin = () => {
               </label>
               <div className="mt-1 relative">
                 <input
-                  type={visible ? "text" : "password"}
+                  type={visible ? 'text' : 'password'}
                   name="password"
                   autoComplete="current-password"
                   required
@@ -96,7 +96,7 @@ const ShopLogin = () => {
               </div>
             </div>
 
-            <div className={`${styles.noramlFlex} justify-between`}>
+            {/* <div className={`${styles.noramlFlex} justify-between`}>
               <div className={`${styles.noramlFlex}`}>
                 <input
                   type="checkbox"
@@ -119,7 +119,7 @@ const ShopLogin = () => {
                   Lupa Password ?
                 </a>
               </div>
-            </div>
+            </div> */}
             <div>
               <button
                 type="submit"

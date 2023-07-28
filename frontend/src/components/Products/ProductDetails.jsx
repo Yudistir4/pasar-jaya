@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineMessage,
   AiOutlineShoppingCart,
-} from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { getAllProductsShop } from "../../redux/actions/product";
-import { backend_url, server } from "../../server";
-import styles from "../../styles/styles";
+} from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAllProductsShop } from '../../redux/actions/product';
+import { backend_url, server } from '../../server';
+import styles from '../../styles/styles';
 import {
   addToWishlist,
   removeFromWishlist,
-} from "../../redux/actions/wishlist";
-import { addTocart } from "../../redux/actions/cart";
-import { toast } from "react-toastify";
-import Ratings from "./Ratings";
-import axios from "axios";
+} from '../../redux/actions/wishlist';
+import { addTocart } from '../../redux/actions/cart';
+import { toast } from 'react-toastify';
+import Ratings from './Ratings';
+import axios from 'axios';
 
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -61,14 +61,14 @@ const ProductDetails = ({ data }) => {
   const addToCartHandler = (id) => {
     const isItemExists = cart && cart.find((i) => i._id === id);
     if (isItemExists) {
-      toast.error("Item already in cart!");
+      toast.error('Item already in cart!');
     } else {
       if (data.stock < 1) {
-        toast.error("Product stock limited!");
+        toast.error('Product stock limited!');
       } else {
         const cartData = { ...data, qty: count };
         dispatch(addTocart(cartData));
-        toast.success("Item added to cart successfully!");
+        toast.success('Item added to cart successfully!');
       }
     }
   };
@@ -85,10 +85,9 @@ const ProductDetails = ({ data }) => {
       0
     );
 
-  const avg =  totalRatings / totalReviewsLength || 0;
+  const avg = totalRatings / totalReviewsLength || 0;
 
   const averageRating = avg.toFixed(2);
-
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
@@ -108,7 +107,7 @@ const ProductDetails = ({ data }) => {
           toast.error(error.response.data.message);
         });
     } else {
-      toast.error("Please login to create a conversation");
+      toast.error('Please login to create a conversation');
     }
   };
 
@@ -120,7 +119,7 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${backend_url}${data && data.images[select]}`}
+                  src={`${data && data.images[select]}`}
                   alt=""
                   className="w-[80%]"
                 />
@@ -128,12 +127,13 @@ const ProductDetails = ({ data }) => {
                   {data &&
                     data.images.map((i, index) => (
                       <div
+                        key={i}
                         className={`${
-                          select === 0 ? "border" : "null"
+                          select === 0 ? 'border' : 'null'
                         } cursor-pointer`}
                       >
                         <img
-                          src={`${backend_url}${i}`}
+                          src={`${i}`}
                           alt=""
                           className="h-[200px] overflow-hidden mr-3 mt-3"
                           onClick={() => setSelect(index)}
@@ -142,7 +142,7 @@ const ProductDetails = ({ data }) => {
                     ))}
                   <div
                     className={`${
-                      select === 1 ? "border" : "null"
+                      select === 1 ? 'border' : 'null'
                     } cursor-pointer`}
                   ></div>
                 </div>
@@ -155,7 +155,7 @@ const ProductDetails = ({ data }) => {
                     Rp {data.discountPrice}
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.originalPrice ? "Rp " + data.originalPrice: null}
+                    {data.originalPrice ? 'Rp ' + data.originalPrice : null}
                   </h3>
                 </div>
 
@@ -183,7 +183,7 @@ const ProductDetails = ({ data }) => {
                         size={30}
                         className="cursor-pointer"
                         onClick={() => removeFromWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
+                        color={click ? 'red' : '#333'}
                         title="Remove from wishlist"
                       />
                     ) : (
@@ -191,7 +191,7 @@ const ProductDetails = ({ data }) => {
                         size={30}
                         className="cursor-pointer"
                         onClick={() => addToWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
+                        color={click ? 'red' : '#333'}
                         title="Add to wishlist"
                       />
                     )}
@@ -208,7 +208,7 @@ const ProductDetails = ({ data }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={`${data?.shop?.avatar}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -263,7 +263,7 @@ const ProductDetailsInfo = ({
         <div className="relative">
           <h5
             className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
+              'text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]'
             }
             onClick={() => setActive(1)}
           >
@@ -276,7 +276,7 @@ const ProductDetailsInfo = ({
         <div className="relative">
           <h5
             className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
+              'text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]'
             }
             onClick={() => setActive(2)}
           >
@@ -289,7 +289,7 @@ const ProductDetailsInfo = ({
         <div className="relative">
           <h5
             className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
+              'text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]'
             }
             onClick={() => setActive(3)}
           >
@@ -312,9 +312,9 @@ const ProductDetailsInfo = ({
         <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
           {data &&
             data.reviews.map((item, index) => (
-              <div className="w-full flex my-2">
+              <div className="w-full flex my-2" key={item.id}>
                 <img
-                  src={`${backend_url}/${item.user.avatar}`}
+                  src={`/${item.user.avatar}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
@@ -342,7 +342,7 @@ const ProductDetailsInfo = ({
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${backend_url}${data?.shop?.avatar}`}
+                  src={`${data?.shop?.avatar}`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />
@@ -359,19 +359,19 @@ const ProductDetailsInfo = ({
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
-                Bergabung pada:{" "}
+                Bergabung pada:{' '}
                 <span className="font-[500]">
                   {data.shop?.createdAt?.slice(0, 10)}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Produk:{" "}
+                Total Produk:{' '}
                 <span className="font-[500]">
                   {products && products.length}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Penilaian:{" "}
+                Total Penilaian:{' '}
                 <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
               <Link to="/">

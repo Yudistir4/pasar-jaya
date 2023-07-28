@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersOfShop } from "../../redux/actions/order";
-import styles from "../../styles/styles";
-import { RxCross1 } from "react-icons/rx";
-import axios from "axios";
-import { server } from "../../server";
-import { toast } from "react-toastify";
-import { loadSeller } from "../../redux/actions/user";
-import { AiOutlineDelete } from "react-icons/ai";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllOrdersOfShop } from '../../redux/actions/order';
+import styles from '../../styles/styles';
+import { RxCross1 } from 'react-icons/rx';
+import axios from 'axios';
+import { server } from '../../server';
+import { toast } from 'react-toastify';
+import { loadSeller } from '../../redux/actions/user';
+import { AiOutlineDelete } from 'react-icons/ai';
 
 const WithdrawMoney = () => {
   const [open, setOpen] = useState(false);
@@ -16,12 +16,12 @@ const WithdrawMoney = () => {
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState(50);
   const [bankInfo, setBankInfo] = useState({
-    bankName: "",
-    bankCountry: "",
+    bankName: '',
+    bankCountry: '',
     bankSwiftCode: null,
     bankAccountNumber: null,
-    bankHolderName: "",
-    bankAddress: "",
+    bankHolderName: '',
+    bankAddress: '',
   });
 
   useEffect(() => {
@@ -51,15 +51,15 @@ const WithdrawMoney = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        toast.success("Withdraw method added successfully!");
+        toast.success('Withdraw method added successfully!');
         dispatch(loadSeller());
         setBankInfo({
-          bankName: "",
-          bankCountry: "",
+          bankName: '',
+          bankCountry: '',
           bankSwiftCode: null,
           bankAccountNumber: null,
-          bankHolderName: "",
-          bankAddress: "",
+          bankHolderName: '',
+          bankAddress: '',
         });
       })
       .catch((error) => {
@@ -73,13 +73,13 @@ const WithdrawMoney = () => {
         withCredentials: true,
       })
       .then((res) => {
-        toast.success("Withdraw method deleted successfully!");
+        toast.success('Withdraw method deleted successfully!');
         dispatch(loadSeller());
       });
   };
 
   const error = () => {
-    toast.error("You not have enough balance to withdraw!");
+    toast.error('You not have enough balance to withdraw!');
   };
 
   const withdrawHandler = async () => {
@@ -94,19 +94,22 @@ const WithdrawMoney = () => {
           { withCredentials: true }
         )
         .then((res) => {
-          toast.success("Withdraw money request is successful!");
+          toast.success('Withdraw money request is successful!');
         });
     }
   };
 
-  const availableBalance = seller?.availableBalance.toFixed(2);
+  const availableBalance = seller?.availableBalance
+    // .toFixed(2)
+    .toLocaleString('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    });
 
   return (
     <div className="w-full h-[90vh] p-8">
       <div className="w-full bg-white h-full rounded flex items-center justify-center flex-col">
-        <h5 className="text-[20px] pb-4">
-          Saldo : ${availableBalance}
-        </h5>
+        <h5 className="text-[20px] pb-4">Saldo : {availableBalance}</h5>
         <div
           className={`${styles.button} text-white !h-[42px] !rounded`}
           onClick={() => (availableBalance < 50 ? error() : setOpen(true))}
@@ -118,7 +121,7 @@ const WithdrawMoney = () => {
         <div className="w-full h-screen z-[9999] fixed top-0 left-0 flex items-center justify-center bg-[#0000004e]">
           <div
             className={`w-[95%] 800px:w-[50%] bg-white shadow rounded ${
-              paymentMethod ? "h-[80vh] overflow-y-scroll" : "h-[unset]"
+              paymentMethod ? 'h-[80vh] overflow-y-scroll' : 'h-[unset]'
             } min-h-[40vh] p-3`}
           >
             <div className="w-full flex justify-end">
@@ -194,7 +197,7 @@ const WithdrawMoney = () => {
 
                   <div className="pt-2">
                     <label>
-                      Bank Account Number{" "}
+                      Bank Account Number{' '}
                       <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -274,8 +277,8 @@ const WithdrawMoney = () => {
                     <div className="800px:flex w-full justify-between items-center">
                       <div className="800px:w-[50%]">
                         <h5>
-                          Account Number:{" "}
-                          {"*".repeat(
+                          Account Number:{' '}
+                          {'*'.repeat(
                             seller?.withdrawMethod.bankAccountNumber.length - 3
                           ) +
                             seller?.withdrawMethod.bankAccountNumber.slice(-3)}

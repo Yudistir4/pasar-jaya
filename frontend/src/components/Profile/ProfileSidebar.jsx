@@ -1,30 +1,30 @@
-import React from "react";
-import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
+import React from 'react';
+import { AiOutlineLogin, AiOutlineMessage } from 'react-icons/ai';
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from 'react-icons/hi';
 import {
   MdOutlineAdminPanelSettings,
   MdOutlinePassword,
   MdOutlineTrackChanges,
-} from "react-icons/md";
-import { TbAddressBook } from "react-icons/tb";
-import { RxPerson } from "react-icons/rx";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { server } from "../../server";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+} from 'react-icons/md';
+import { TbAddressBook } from 'react-icons/tb';
+import { RxPerson } from 'react-icons/rx';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { server } from '../../server';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 const ProfileSidebar = ({ setActive, active }) => {
   const navigate = useNavigate();
- const {user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const logoutHandler = () => {
     axios
       .get(`${server}/user/logout`, { withCredentials: true })
       .then((res) => {
         toast.success(res.data.message);
         window.location.reload(true);
-        navigate("/login");
+        navigate('/login');
       })
       .catch((error) => {
         console.log(error.response.data.message);
@@ -36,10 +36,10 @@ const ProfileSidebar = ({ setActive, active }) => {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(1)}
       >
-        <RxPerson size={20} color={active === 1 ? "#F8981D" : ""} />
+        <RxPerson size={20} color={active === 1 ? '#F8981D' : ''} />
         <span
           className={`pl-3 ${
-            active === 1 ? "text-[#F8981D]" : ""
+            active === 1 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Data Diri
@@ -49,16 +49,16 @@ const ProfileSidebar = ({ setActive, active }) => {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(2)}
       >
-        <HiOutlineShoppingBag size={20} color={active === 2 ? "#F8981D" : ""} />
+        <HiOutlineShoppingBag size={20} color={active === 2 ? '#F8981D' : ''} />
         <span
           className={`pl-3 ${
-            active === 2 ? "text-[#F8981D]" : ""
+            active === 2 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Pesanan
         </span>
       </div>
-      <div
+      {/* <div
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(3)}
       >
@@ -70,16 +70,16 @@ const ProfileSidebar = ({ setActive, active }) => {
         >
           Pengembalian dana
         </span>
-      </div>
+      </div> */}
 
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(4) || navigate("/inbox")}
+        onClick={() => setActive(4) || navigate('/inbox')}
       >
-        <AiOutlineMessage size={20} color={active === 4 ? "#F8981D" : ""} />
+        <AiOutlineMessage size={20} color={active === 4 ? '#F8981D' : ''} />
         <span
           className={`pl-3 ${
-            active === 4 ? "text-[#F8981D]" : ""
+            active === 4 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Pesan Masuk
@@ -90,10 +90,13 @@ const ProfileSidebar = ({ setActive, active }) => {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(5)}
       >
-        <MdOutlineTrackChanges size={20} color={active === 5 ? "#F8981D" : ""} />
+        <MdOutlineTrackChanges
+          size={20}
+          color={active === 5 ? '#F8981D' : ''}
+        />
         <span
           className={`pl-3 ${
-            active === 5 ? "text-[#F8981D]" : ""
+            active === 5 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Lacak Pesanan
@@ -104,10 +107,10 @@ const ProfileSidebar = ({ setActive, active }) => {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(6)}
       >
-        <RiLockPasswordLine size={20} color={active === 6 ? "#F8981D" : ""} />
+        <RiLockPasswordLine size={20} color={active === 6 ? '#F8981D' : ''} />
         <span
           className={`pl-3 ${
-            active === 6 ? "text-[#F8981D]" : ""
+            active === 6 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Ganti Password
@@ -118,17 +121,17 @@ const ProfileSidebar = ({ setActive, active }) => {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(7)}
       >
-        <TbAddressBook size={20} color={active === 7 ? "#F8981D" : ""} />
+        <TbAddressBook size={20} color={active === 7 ? '#F8981D' : ''} />
         <span
           className={`pl-3 ${
-            active === 7 ? "text-[#F8981D]" : ""
+            active === 7 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Alamat
         </span>
       </div>
 
-      {user && user?.role === "Admin" && (
+      {user && user?.role === 'Admin' && (
         <Link to="/admin/dashboard">
           <div
             className="flex items-center cursor-pointer w-full mb-8"
@@ -136,11 +139,11 @@ const ProfileSidebar = ({ setActive, active }) => {
           >
             <MdOutlineAdminPanelSettings
               size={20}
-              color={active === 7 ? "#F8981D" : ""}
+              color={active === 7 ? '#F8981D' : ''}
             />
             <span
               className={`pl-3 ${
-                active === 8 ? "text-[#F8981D]" : ""
+                active === 8 ? 'text-[#F8981D]' : ''
               } 800px:block hidden`}
             >
               Admin Dashboard
@@ -152,10 +155,10 @@ const ProfileSidebar = ({ setActive, active }) => {
         className="single_item flex items-center cursor-pointer w-full mb-8"
         onClick={logoutHandler}
       >
-        <AiOutlineLogin size={20} color={active === 8 ? "#F8981D" : ""} />
+        <AiOutlineLogin size={20} color={active === 8 ? '#F8981D' : ''} />
         <span
           className={`pl-3 ${
-            active === 8 ? "text-[#F8981D]" : ""
+            active === 8 ? 'text-[#F8981D]' : ''
           } 800px:block hidden`}
         >
           Keluar

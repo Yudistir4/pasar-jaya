@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "../../styles/styles";
-import { categoriesData, productData } from "../../static/data";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styles from '../../styles/styles';
+import { categoriesData, productData } from '../../static/data';
 import {
   AiOutlineHeart,
   AiOutlineSearch,
   AiOutlineShoppingCart,
-} from "react-icons/ai";
-import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { BiMenuAltLeft } from "react-icons/bi";
-import { CgProfile } from "react-icons/cg";
-import DropDown from "./DropDown";
-import Navbar from "./Navbar";
-import { useSelector } from "react-redux";
-import { backend_url } from "../../server";
-import Cart from "../cart/Cart";
-import Wishlist from "../Wishlist/Wishlist";
-import { RxCross1 } from "react-icons/rx";
+} from 'react-icons/ai';
+import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
+import { BiMenuAltLeft } from 'react-icons/bi';
+import { CgProfile } from 'react-icons/cg';
+import DropDown from './DropDown';
+import Navbar from './Navbar';
+import { useSelector } from 'react-redux';
+import { backend_url } from '../../server';
+import Cart from '../cart/Cart';
+import Wishlist from '../Wishlist/Wishlist';
+import { RxCross1 } from 'react-icons/rx';
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -24,7 +24,7 @@ const Header = ({ activeHeading }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { allProducts } = useSelector((state) => state.products);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
@@ -44,7 +44,7 @@ const Header = ({ activeHeading }) => {
     setSearchData(filteredProducts);
   };
 
-  window.addEventListener("scroll", () => {
+  window.addEventListener('scroll', () => {
     if (window.scrollY > 70) {
       setActive(true);
     } else {
@@ -53,14 +53,15 @@ const Header = ({ activeHeading }) => {
   });
 
   return (
-    <>
+    <div className="z-20">
       <div className={`${styles.section}`}>
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
               <img
-                width="150px"
-                height="150px"
+                className="ml-2"
+                width="110px"
+                height="110px"
                 src="https://mail3.pasarjaya.co.id/frontend/assets/img/logo/logo.png"
                 alt=""
               />
@@ -79,15 +80,15 @@ const Header = ({ activeHeading }) => {
               size={30}
               className="absolute right-2 top-1.5 cursor-pointer"
             />
-            {searchData && searchData.length !== 0 ? (
-              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+            {searchData && searchTerm && searchData.length !== 0 ? (
+              <div className="w-full absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
                   searchData.map((i, index) => {
                     return (
                       <Link to={`/product/${i._id}`}>
                         <div className="w-full flex items-start-py-3">
                           <img
-                            src={`${backend_url}${i.images[0]}`}
+                            src={`${i.images[0]}`}
                             alt=""
                             className="w-[40px] h-[40px] mr-[10px]"
                           />
@@ -101,9 +102,9 @@ const Header = ({ activeHeading }) => {
           </div>
 
           <div className={`${styles.button}`}>
-            <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
+            <Link to={`${isSeller ? '/dashboard' : '/shop-create'}`}>
               <h1 className="text-[#fff] flex items-center">
-                {isSeller ? "Ke Dasbor" : "Jadi Penjual"}{" "}
+                {isSeller ? 'Ke Dasbor' : 'Jadi Penjual'}{' '}
                 <IoIosArrowForward className="ml-1" />
               </h1>
             </Link>
@@ -111,8 +112,9 @@ const Header = ({ activeHeading }) => {
         </div>
       </div>
       <div
-        className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-          } transition hidden 800px:flex items-center justify-between w-full bg-[#08893C] h-[70px]`}
+        className={`${
+          active === true ? 'shadow-sm fixed top-0 left-0 z-10' : null
+        } transition z-20 hidden 800px:flex items-center justify-between w-full bg-[#08893C] h-[70px]`}
       >
         <div
           className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
@@ -177,7 +179,7 @@ const Header = ({ activeHeading }) => {
                 {isAuthenticated ? (
                   <Link to="/profile">
                     <img
-                      src={`${backend_url}${user?.avatar}`}
+                      src={`${user?.avatar}`}
                       className="w-[35px] h-[35px] rounded-full"
                       alt=""
                     />
@@ -203,9 +205,10 @@ const Header = ({ activeHeading }) => {
 
       {/* mobile header */}
       <div
-        className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-          }
-      w-full h-[60px] bg-[#fff] z-50 top-0 left-0 shadow-sm 800px:hidden`}
+        className={`${
+          active === true ? 'shadow-sm fixed top-0 left-0 z-10' : null
+        }
+      w-full h-[60px] flex bg-[#fff] z-50 top-0 left-0 shadow-sm 800px:hidden`}
       >
         <div className="w-full flex items-center justify-between">
           <div>
@@ -215,7 +218,7 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpen(true)}
             />
           </div>
-          <div>
+          {/* <div>
             <Link to="/">
               <img
                 width="150px"
@@ -224,14 +227,14 @@ const Header = ({ activeHeading }) => {
                 alt=""
               />
             </Link>
-          </div>
+          </div> */}
           <div>
             <div
               className="relative mr-[20px]"
               onClick={() => setOpenCart(true)}
             >
               <AiOutlineShoppingCart size={30} />
-              <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                 {cart && cart.length}
               </span>
             </div>
@@ -256,7 +259,7 @@ const Header = ({ activeHeading }) => {
                     onClick={() => setOpenWishlist(true) || setOpen(false)}
                   >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
-                    <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+                    <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                       {wishlist && wishlist.length}
                     </span>
                   </div>
@@ -281,7 +284,7 @@ const Header = ({ activeHeading }) => {
                     {searchData.map((i) => {
                       const d = i.name;
 
-                      const Product_name = d.replace(/\s+/g, "-");
+                      const Product_name = d.replace(/\s+/g, '-');
                       return (
                         <Link to={`/product/${Product_name}`}>
                           <div className="flex items-center">
@@ -316,7 +319,7 @@ const Header = ({ activeHeading }) => {
                   <div>
                     <Link to="/profile">
                       <img
-                        src={`${backend_url}${user.avatar}`}
+                        src={`${user.avatar}`}
                         alt=""
                         className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
                       />
@@ -343,7 +346,7 @@ const Header = ({ activeHeading }) => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

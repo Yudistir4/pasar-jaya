@@ -1,11 +1,11 @@
-import React from 'react'
-import { AiOutlineGift } from 'react-icons/ai'
-import { BiMessageSquareDetail } from 'react-icons/bi'
-import { FiPackage, FiShoppingBag } from 'react-icons/fi'
-import { MdOutlineLocalOffer } from 'react-icons/md'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { backend_url } from '../../server'
+import React from 'react';
+import { AiOutlineGift } from 'react-icons/ai';
+import { BiMessageSquareDetail } from 'react-icons/bi';
+import { FiPackage, FiShoppingBag } from 'react-icons/fi';
+import { MdOutlineLocalOffer } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { backend_url } from '../../server';
 
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.user);
@@ -15,8 +15,9 @@ const AdminHeader = () => {
       <div>
         <Link to="/">
           <img
-            width="150px"
-            height="150px"
+            className="ml-2"
+            width="110px"
+            height="110px"
             src="https://mail3.pasarjaya.co.id/frontend/assets/img/logo/logo.png"
             alt=""
           />
@@ -24,7 +25,7 @@ const AdminHeader = () => {
       </div>
       <div className="flex items-center">
         <div className="flex items-center mr-4">
-          <Link to="/dashboard/cupouns" className="800px:block hidden">
+          {/* <Link to="/dashboard/cupouns" className="800px:block hidden">
             <AiOutlineGift
               color="#555"
               size={30}
@@ -47,23 +48,23 @@ const AdminHeader = () => {
           </Link>
           <Link to="/dashboard-orders" className="800px:block hidden">
             <FiPackage color="#555" size={30} className="mx-5 cursor-pointer" />
-          </Link>
-          <Link to="/dashboard-messages" className="800px:block hidden">
+          </Link> */}
+          {/* <Link to="/dashboard-messages" className="800px:block hidden">
             <BiMessageSquareDetail
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
             />
-          </Link>
+          </Link> */}
           <img
-            src={`${backend_url}${user?.avatar}`}
+            src={`${user?.avatar}`}
             alt=""
             className="w-[50px] h-[50px] rounded-full object-cover"
           />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminHeader
+export default AdminHeader;

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Footer from "../components/Layout/Footer";
-import Header from "../components/Layout/Header";
-import styles from "../styles/styles";
+import React, { useState } from 'react';
+import Footer from '../components/Layout/Footer';
+import Header from '../components/Layout/Header';
+import styles from '../styles/styles';
 
 const FAQPage = () => {
   return (
@@ -36,7 +36,7 @@ const Faq = () => {
             onClick={() => toggleTab(2)}
           >
             <span className="text-lg font-medium text-gray-900">
-            Apa itu kebijakan pengembalian ?
+              Apa itu kebijakan pengembalian ?
             </span>
             {activeTab === 2 ? (
               <svg
@@ -71,11 +71,11 @@ const Faq = () => {
           {activeTab === 2 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-              Jika Anda tidak puas dengan pembelian Anda, 
-              kami menerima pengembalian dalam waktu 30 hari setelah pengiriman. 
-              Untuk memulai pengembalian, silakan kirim email kepada kami 
-              di support@pasarjaya.co.id dengan nomor pesanan Anda 
-              dan penjelasan singkat mengapa Anda mengembalikan barang tersebut.
+                Jika Anda tidak puas dengan pembelian Anda, kami menerima
+                pengembalian dalam waktu 30 hari setelah pengiriman. Untuk
+                memulai pengembalian, silakan kirim email kepada kami di
+                support@pasarjaya.co.id dengan nomor pesanan Anda dan penjelasan
+                singkat mengapa Anda mengembalikan barang tersebut.
               </p>
             </div>
           )}
@@ -87,7 +87,7 @@ const Faq = () => {
             onClick={() => toggleTab(3)}
           >
             <span className="text-lg font-medium text-gray-900">
-            Bagaimana cara melacak pesanan saya ?
+              Bagaimana cara melacak pesanan saya ?
             </span>
             {activeTab === 3 ? (
               <svg
@@ -122,9 +122,9 @@ const Faq = () => {
           {activeTab === 3 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-              Anda dapat melacak pesanan Anda dengan mengklik tautan pelacakan
-              di email konfirmasi pengiriman Anda, atau dengan masuk ke akun Anda
-              di situs web kami dan melihat detail pesanan.
+                Anda dapat melacak pesanan Anda dengan mengklik tautan pelacakan
+                di email konfirmasi pengiriman Anda, atau dengan masuk ke akun
+                Anda di situs web kami dan melihat detail pesanan.
               </p>
             </div>
           )}
@@ -136,7 +136,7 @@ const Faq = () => {
             onClick={() => toggleTab(4)}
           >
             <span className="text-lg font-medium text-gray-900">
-            Bagaimana cara menghubungi dukungan pelanggan?
+              Bagaimana cara menghubungi dukungan pelanggan?
             </span>
             {activeTab === 4 ? (
               <svg
@@ -171,9 +171,10 @@ const Faq = () => {
           {activeTab === 4 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-              Anda dapat menghubungi tim dukungan pelanggan kami dengan mengirim email 
-              kepada kami di support@pasarjaya.co.id, atau dengan menghubungi kami 
-              di (+62) 8932492033 antara jam 09.00 dan 17.00 , Senin sampai Jumat.
+                Anda dapat menghubungi tim dukungan pelanggan kami dengan
+                mengirim email kepada kami di support@pasarjaya.co.id, atau
+                dengan menghubungi kami di (+62) 8932492033 antara jam 09.00 dan
+                17.00 , Senin sampai Jumat.
               </p>
             </div>
           )}
@@ -185,7 +186,7 @@ const Faq = () => {
             onClick={() => toggleTab(5)}
           >
             <span className="text-lg font-medium text-gray-900">
-            Bisakah saya mengubah atau membatalkan pesanan saya?
+              Bisakah saya mengubah atau membatalkan pesanan saya?
             </span>
             {activeTab === 5 ? (
               <svg
@@ -220,9 +221,10 @@ const Faq = () => {
           {activeTab === 5 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-              Sayangnya, setelah pesanan dilakukan, kami tidak dapat melakukan perubahan atau pembatalan. 
-              Jika Anda tidak lagi menginginkan barang yang Anda pesan, Anda dapat mengembalikannya untuk 
-              pengembalian dana dalam waktu 30 hari setelah pengiriman.
+                Sayangnya, setelah pesanan dilakukan, kami tidak dapat melakukan
+                perubahan atau pembatalan. Jika Anda tidak lagi menginginkan
+                barang yang Anda pesan, Anda dapat mengembalikannya untuk
+                pengembalian dana dalam waktu 30 hari setelah pengiriman.
               </p>
             </div>
           )}
@@ -234,7 +236,7 @@ const Faq = () => {
             onClick={() => toggleTab(6)}
           >
             <span className="text-lg font-medium text-gray-900">
-            Apakah kamu menawarkan pengiriman keluar daerah?
+              Apakah kamu menawarkan pengiriman keluar daerah?
             </span>
             {activeTab === 6 ? (
               <svg
@@ -269,7 +271,7 @@ const Faq = () => {
           {activeTab === 6 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-              Saat ini, kami hanya menawarkan pengiriman di sekitaran jakarta.
+                Saat ini, kami hanya menawarkan pengiriman di sekitaran jakarta.
               </p>
             </div>
           )}
@@ -281,7 +283,7 @@ const Faq = () => {
             onClick={() => toggleTab(7)}
           >
             <span className="text-lg font-medium text-gray-900">
-            Metode pembayaran apa yang Anda terima?
+              Metode pembayaran apa yang Anda terima?
             </span>
             {activeTab === 7 ? (
               <svg
@@ -316,7 +318,8 @@ const Faq = () => {
           {activeTab === 7 && (
             <div className="mt-4">
               <p className="text-base text-gray-500">
-              Kami menerima GoPay, Qris, dan juga kami memiliki sistem cash on delivery.
+                Kami menerima GoPay, Qris, dan juga kami memiliki sistem cash on
+                delivery.
               </p>
             </div>
           )}

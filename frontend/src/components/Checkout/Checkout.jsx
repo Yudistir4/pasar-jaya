@@ -1,31 +1,30 @@
-import React, { useState } from "react";
-import styles from "../../styles/styles";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import axios from "axios";
-import { server } from "../../server";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import styles from '../../styles/styles';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { server } from '../../server';
+import { toast } from 'react-toastify';
 
 const Checkout = () => {
   const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const [userInfo, setUserInfo] = useState(false);
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [address1, setAddress1] = useState('');
+  const [address2, setAddress2] = useState('');
   const [zipCode, setZipCode] = useState(null);
-  const [couponCode, setCouponCode] = useState("");
+  const [couponCode, setCouponCode] = useState('');
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState('');
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState([]);
 
-  console.log("token di checkout", token);
-
+  console.log('token di checkout', token);
 
   useEffect(() => {
-    const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    const orderData = JSON.parse(localStorage.getItem('latestOrder'));
     setOrderData(orderData);
   }, []);
 
@@ -36,29 +35,33 @@ const Checkout = () => {
 
   const processPayment = async () => {
     const data = {
-      order_id: "1",
-      total: subTotalPrice
-    }
+      order_id: '1',
+      total: subTotalPrice,
+    };
 
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
-    }
+        'Content-Type': 'application/json',
+      },
+    };
 
-    const response = await axios.post(`${server}/payment/process-transaction`, data, config)
+    const response = await axios.post(
+      `${server}/payment/process-transaction`,
+      data,
+      config
+    );
 
-    console.log("responnya nih ", response);
-    setToken(response.data.token)
-  }
+    console.log('responnya nih ', response);
+    setToken(response.data.token);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const paymentSubmit = () => {
-    if (address1 === "" || address2 === "" || zipCode === null) {
-      toast.error("Please choose your delivery address!")
+    if (address1 === '' || address2 === '' || zipCode === null) {
+      toast.error('Please choose your delivery address!');
     } else {
       const shippingAddress = {
         address1,
@@ -74,12 +77,12 @@ const Checkout = () => {
         discountPrice,
         shippingAddress,
         user,
-      }
+      };
 
       // update local storage with the updated orders array
-      localStorage.setItem("latestOrder", JSON.stringify(orderData));
-      localStorage.setItem("tokenPayment", JSON.stringify(token))
-      navigate("/payment");
+      localStorage.setItem('latestOrder', JSON.stringify(orderData));
+      localStorage.setItem('tokenPayment', JSON.stringify(token));
+      navigate('/payment');
     }
 
     // alert("payment in construction")
@@ -100,8 +103,8 @@ const Checkout = () => {
           cart && cart.filter((item) => item.shopId === shopId);
 
         if (isCouponValid.length === 0) {
-          toast.error("Coupon code is not valid for this shop");
-          setCouponCode("");
+          toast.error('Coupon code is not valid for this shop');
+          setCouponCode('');
         } else {
           const eligiblePrice = isCouponValid.reduce(
             (acc, item) => acc + item.qty * item.discountPrice,
@@ -110,21 +113,21 @@ const Checkout = () => {
           const discountPrice = (eligiblePrice * couponCodeValue) / 100;
           setDiscountPrice(discountPrice);
           setCouponCodeData(res.data.couponCode);
-          setCouponCode("");
+          setCouponCode('');
         }
       }
       if (res.data.couponCode === null) {
         toast.error("Coupon code doesn't exists!");
-        setCouponCode("");
+        setCouponCode('');
       }
     });
   };
 
-  const discountPercentenge = couponCodeData ? discountPrice : "";
+  const discountPercentenge = couponCodeData ? discountPrice : '';
 
   const totalPrice = couponCodeData
     ? (subTotalPrice - discountPercentenge).toFixed(2)
-    : (subTotalPrice).toFixed(2);
+    : subTotalPrice.toFixed(2);
 
   console.log(discountPercentenge);
 
@@ -156,24 +159,21 @@ const Checkout = () => {
           />
         </div>
       </div>
-      {
-        token ? (
-          <div
-            className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
-            onClick={paymentSubmit}
-          >
-            <h5 className="text-white">Menuju ke Pembayaran</h5>
-          </div>
-        ) : (
-          <div
+      {token ? (
+        <div
+          className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
+          onClick={paymentSubmit}
+        >
+          <h5 className="text-white">Menuju ke Pembayaran</h5>
+        </div>
+      ) : (
+        <div
           className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
           onClick={processPayment}
         >
           <h5 className="text-white">Simpan Pesanan</h5>
         </div>
-        )
-      }
-
+      )}
     </div>
   );
 };
@@ -252,7 +252,7 @@ const ShippingInfo = ({
               className={`${styles.input} !w-[95%]`}
             />
           </div>
-          <div className="w-[50%]">
+          {/* <div className="w-[50%]">
             <label className="block pb-2">Alamat 2</label>
             <input
               type="address"
@@ -261,7 +261,7 @@ const ShippingInfo = ({
               required
               className={`${styles.input}`}
             />
-          </div>
+          </div> */}
         </div>
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
@@ -283,7 +283,6 @@ const ShippingInfo = ({
               <option className="block pb-2" value="">
                 Ambil di Toko
               </option>
-
             </select>
           </div>
         </div>
@@ -341,7 +340,7 @@ const CartData = ({
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Diskon:</h3>
         <h5 className="text-[18px] font-[600]">
-          - {discountPercentenge ? "Rp" + discountPercentenge.toString() : null}
+          - {discountPercentenge ? 'Rp' + discountPercentenge.toString() : null}
         </h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">Rp {totalPrice}</h5>
