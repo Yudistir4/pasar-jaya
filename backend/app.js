@@ -5,10 +5,17 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-console.log(process.env.ORIGIN);
+
+// config
+if (process.env.NODE_ENV !== 'PRODUCTION') {
+  require('dotenv').config({
+    path: 'config/.env',
+  });
+}
+
 app.use(
   cors({
-    // origin: 'http://localhost:3000',
+    origin: process.env.ORIGIN,
     credentials: true,
   })
 );
@@ -21,13 +28,6 @@ app.use('/test', (req, res) => {
 });
 
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-
-// config
-if (process.env.NODE_ENV !== 'PRODUCTION') {
-  require('dotenv').config({
-    path: 'config/.env',
-  });
-}
 
 // import routes
 const user = require('./controller/user');
