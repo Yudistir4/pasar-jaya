@@ -143,11 +143,15 @@ const OrderDetails = () => {
             onChange={(e) => setStatus(e.target.value)}
             className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
           >
-            {['Pending', 'Pengemasan', 'Pengiriman', 'Terkirim']
+            {['Pending', 'Pengemasan', 'Pengiriman', 'Terkirim', 'Dibatalkan']
               .slice(
-                ['Pending', 'Pengemasan', 'Pengiriman', 'Terkirim'].indexOf(
-                  data?.status
-                )
+                [
+                  'Pending',
+                  'Pengemasan',
+                  'Pengiriman',
+                  'Terkirim',
+                  'Dibatalkan',
+                ].indexOf(data?.status)
               )
               .map((option, index) => (
                 <option value={option} key={index}>
