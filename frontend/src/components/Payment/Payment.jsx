@@ -29,7 +29,6 @@ const Payment = () => {
       window.snap.pay(token, {
         onSuccess: (result) => {
           localStorage.setItem("Pembayaran", JSON.stringify(result))
-          setToken("")
         },
         onPending: (result) => {
           localStorage.setItem("Pembayaran", JSON.stringify(result))
@@ -39,7 +38,7 @@ const Payment = () => {
           console.log(error)
           setToken("")
         },
-        onClose: (result) => {
+        onClose: () => {
           console.log("Anda belum menyelesaikan pembayaran")
           setToken("")
         },

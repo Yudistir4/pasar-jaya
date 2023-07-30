@@ -35,8 +35,7 @@ const Checkout = () => {
 
   const processPayment = async () => {
     const timeStamp = Date.now();
-    const order_id = `${cart[0]._id}_${timeStamp}` ;
-    console.log("ini id nya di payment",order_id)
+    const order_id = `${cart[0]._id}_${timeStamp}`;
     const data = {
       order_id: order_id,
       total: subTotalPrice,
