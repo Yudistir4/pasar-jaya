@@ -1,11 +1,11 @@
-import { Button } from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Loader from "../Layout/Loader";
-import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { Button } from '@material-ui/core';
+import { DataGrid } from '@material-ui/data-grid';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Loader from '../Layout/Loader';
+import { getAllOrdersOfShop } from '../../redux/actions/order';
+import { AiOutlineArrowRight } from 'react-icons/ai';
 
 const AllOrders = () => {
   const { orders, isLoading } = useSelector((state) => state.order);
@@ -18,49 +18,49 @@ const AllOrders = () => {
   }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    { field: 'id', headerName: 'Order ID', minWidth: 150, flex: 0.7 },
 
     {
-      field: "namaProduk",
-      headerName: "Nama Produk",
-      type: "string",
+      field: 'namaProduk',
+      headerName: 'Nama Produk',
+      type: 'string',
       minWidth: 130,
       flex: 0.8,
     },
 
     {
-      field: "status",
-      headerName: "Status",
+      field: 'status',
+      headerName: 'Status',
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
+        return params.getValue(params.id, 'status') === 'Terkirim'
+          ? 'greenColor'
+          : 'redColor';
       },
     },
     {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
+      field: 'itemsQty',
+      headerName: 'Items Qty',
+      type: 'number',
       minWidth: 130,
       flex: 0.7,
     },
 
     {
-      field: "total",
-      headerName: "Total",
-      type: "number",
+      field: 'total',
+      headerName: 'Total',
+      type: 'number',
       minWidth: 130,
       flex: 0.8,
     },
 
     {
-      field: " ",
+      field: ' ',
       flex: 1,
       minWidth: 150,
-      headerName: "",
-      type: "number",
+      headerName: '',
+      type: 'number',
       sortable: false,
       renderCell: (params) => {
         return (
@@ -84,7 +84,7 @@ const AllOrders = () => {
         id: item._id,
         namaProduk: item.cart[0].name,
         itemsQty: item.cart.length,
-        total: "Rp " + item.totalPrice,
+        total: 'Rp ' + item.totalPrice,
         status: item.status,
       });
     });

@@ -1,40 +1,35 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const midtransClient = require("midtrans-client");
+const midtransClient = require('midtrans-client');
 
-
-router.post("/process-transaction", (req, res, next) => {
+router.post('/process-transaction', (req, res, next) => {
   try {
     const snap = new midtransClient.Snap({
       isProduction: false,
       serverKey: process.env.MIDTRANS_SERVER_KEY,
-      clientKey: process.env.MIDTRANS_CLIENT_KEY
-    })
+      clientKey: process.env.MIDTRANS_CLIENT_KEY,
+    });
 
     const parameter = {
       transaction_details: {
         order_id: req.body.order_id,
-        gross_amount: req.body.total
-      }
-    }
+        gross_amount: req.body.total,
+      },
+    };
 
     snap.createTransaction(parameter).then((transaction) => {
       const dataPayment = {
-        response: JSON.stringify(transaction)
-      }
+        response: JSON.stringify(transaction),
+      };
 
-      const token = transaction.token
+      const token = transaction.token;
 
-      res.status(200).json({message: "berhasil", dataPayment, token: token})
-    })
-
-    
-
+      res.status(200).json({ message: 'berhasil', dataPayment, token: token });
+    });
   } catch (error) {
-    res.status(500).json({message: error.message})
+    res.status(500).json({ message: error.message });
   }
-})
-
+});
 
 // var OrderPayment = require("../model/orderPayment");
 

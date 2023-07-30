@@ -7,7 +7,7 @@ import ProductCard from '../Route/ProductCard/ProductCard';
 import { backend_url } from '../../server';
 import Ratings from '../Products/Ratings';
 import { getAllEventsShop } from '../../redux/actions/event';
-
+import { format } from 'timeago.js';
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
@@ -37,7 +37,7 @@ const ShopProfileData = ({ isOwner }) => {
               Produk Toko
             </h5>
           </div>
-          <div className="flex items-center" onClick={() => setActive(2)}>
+          {/* <div className="flex items-center" onClick={() => setActive(2)}>
             <h5
               className={`font-[600] text-[20px] ${
                 active === 2 ? 'text-red-500' : 'text-[#333]'
@@ -45,7 +45,7 @@ const ShopProfileData = ({ isOwner }) => {
             >
               Acara yang sedang berjalan
             </h5>
-          </div>
+          </div> */}
 
           <div className="flex items-center" onClick={() => setActive(3)}>
             <h5
@@ -107,7 +107,7 @@ const ShopProfileData = ({ isOwner }) => {
             allReviews.map((item, index) => (
               <div className="w-full flex my-4">
                 <img
-                  src={`/${item.user.avatar}`}
+                  src={`${item.user.avatar}`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />
@@ -117,7 +117,10 @@ const ShopProfileData = ({ isOwner }) => {
                     <Ratings rating={item.rating} />
                   </div>
                   <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
-                  <p className="text-[#000000a7] text-[14px]">{'2days ago'}</p>
+                  <p className="text-[#000000a7] text-[14px]">
+                    {' '}
+                    {format(item?.createdAt)}
+                  </p>
                 </div>
               </div>
             ))}

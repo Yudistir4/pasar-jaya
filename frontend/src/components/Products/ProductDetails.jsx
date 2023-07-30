@@ -316,7 +316,7 @@ const ProductDetailsInfo = ({
             data.reviews.map((item, index) => (
               <div className="w-full flex my-2" key={item.id}>
                 <img
-                  src={`/${item.user.avatar}`}
+                  src={`${item.user.avatar}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />

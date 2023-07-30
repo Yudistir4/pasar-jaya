@@ -56,7 +56,6 @@ import { ShopHomePage } from './ShopRoutes.js';
 import SellerProtectedRoute from './routes/SellerProtectedRoute';
 import { getAllProducts } from './redux/actions/product';
 import { getAllEvents } from './redux/actions/event';
- 
 
 const App = () => {
   useEffect(() => {

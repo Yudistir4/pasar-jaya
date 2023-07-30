@@ -14,14 +14,14 @@ const WithdrawMoney = () => {
   const dispatch = useDispatch();
   const { seller } = useSelector((state) => state.seller);
   const [paymentMethod, setPaymentMethod] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState(50);
+  const [withdrawAmount, setWithdrawAmount] = useState(50000);
   const [bankInfo, setBankInfo] = useState({
     bankName: '',
-    bankCountry: '',
-    bankSwiftCode: null,
-    bankAccountNumber: null,
-    bankHolderName: '',
-    bankAddress: '',
+    bankNumber: '',
+    cardholderName: null,
+    // bankAccountNumber: null,
+    // bankHolderName: '',
+    // bankAddress: '',
   });
 
   useEffect(() => {
@@ -33,11 +33,11 @@ const WithdrawMoney = () => {
 
     const withdrawMethod = {
       bankName: bankInfo.bankName,
-      bankCountry: bankInfo.bankCountry,
-      bankSwiftCode: bankInfo.bankSwiftCode,
-      bankAccountNumber: bankInfo.bankAccountNumber,
-      bankHolderName: bankInfo.bankHolderName,
-      bankAddress: bankInfo.bankAddress,
+      bankNumber: bankInfo.bankNumber,
+      cardholderName: bankInfo.cardholderName,
+      // bankAccountNumber: bankInfo.bankAccountNumber,
+      // bankHolderName: bankInfo.bankHolderName,
+      // bankAddress: bankInfo.bankAddress,
     };
 
     setPaymentMethod(false);
@@ -55,11 +55,11 @@ const WithdrawMoney = () => {
         dispatch(loadSeller());
         setBankInfo({
           bankName: '',
-          bankCountry: '',
-          bankSwiftCode: null,
-          bankAccountNumber: null,
-          bankHolderName: '',
-          bankAddress: '',
+          bankNumber: '',
+          cardholderName: null,
+          // bankAccountNumber: null,
+          // bankHolderName: '',
+          // bankAddress: '',
         });
       })
       .catch((error) => {
@@ -82,8 +82,14 @@ const WithdrawMoney = () => {
     toast.error('You not have enough balance to withdraw!');
   };
 
+  const availableBalance = seller?.availableBalance.toLocaleString('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  });
+
   const withdrawHandler = async () => {
-    if (withdrawAmount < 50 || withdrawAmount > availableBalance) {
+    console.log(typeof seller?.availableBalance);
+    if (withdrawAmount < 50000 || withdrawAmount > seller?.availableBalance) {
       toast.error("You can't withdraw this amount!");
     } else {
       const amount = withdrawAmount;
@@ -95,16 +101,10 @@ const WithdrawMoney = () => {
         )
         .then((res) => {
           toast.success('Withdraw money request is successful!');
+          setOpen(false);
         });
     }
   };
-
-  const availableBalance = seller?.availableBalance
-    // .toFixed(2)
-    .toLocaleString('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    });
 
   return (
     <div className="w-full h-[90vh] p-8">
@@ -112,7 +112,9 @@ const WithdrawMoney = () => {
         <h5 className="text-[20px] pb-4">Saldo : {availableBalance}</h5>
         <div
           className={`${styles.button} text-white !h-[42px] !rounded`}
-          onClick={() => (availableBalance < 50 ? error() : setOpen(true))}
+          onClick={() =>
+            seller?.availableBalance < 50000 ? error() : setOpen(true)
+          }
         >
           Tarik
         </div>
@@ -150,52 +152,52 @@ const WithdrawMoney = () => {
                         setBankInfo({ ...bankInfo, bankName: e.target.value })
                       }
                       id=""
-                      placeholder="Enter your Bank name!"
+                      placeholder="Masukkan nama bank!"
                       className={`${styles.input} mt-2`}
                     />
                   </div>
                   <div className="pt-2">
                     <label>
-                      Bank Country <span className="text-red-500">*</span>
+                      Nomor Rekening <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       name=""
-                      value={bankInfo.bankCountry}
+                      value={bankInfo.bankNumber}
                       onChange={(e) =>
                         setBankInfo({
                           ...bankInfo,
-                          bankCountry: e.target.value,
+                          bankNumber: e.target.value,
                         })
                       }
                       id=""
                       required
-                      placeholder="Enter your bank Country!"
+                      placeholder="Masukkan Nomor Rekening!"
                       className={`${styles.input} mt-2`}
                     />
                   </div>
                   <div className="pt-2">
                     <label>
-                      Bank Swift Code <span className="text-red-500">*</span>
+                      Atas Nama <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       name=""
                       id=""
                       required
-                      value={bankInfo.bankSwiftCode}
+                      value={bankInfo.cardholderName}
                       onChange={(e) =>
                         setBankInfo({
                           ...bankInfo,
-                          bankSwiftCode: e.target.value,
+                          cardholderName: e.target.value,
                         })
                       }
-                      placeholder="Enter your Bank Swift Code!"
+                      placeholder="Atas Nama!"
                       className={`${styles.input} mt-2`}
                     />
                   </div>
 
-                  <div className="pt-2">
+                  {/* <div className="pt-2">
                     <label>
                       Bank Account Number{' '}
                       <span className="text-red-500">*</span>
@@ -215,8 +217,8 @@ const WithdrawMoney = () => {
                       placeholder="Enter your bank account number!"
                       className={`${styles.input} mt-2`}
                     />
-                  </div>
-                  <div className="pt-2">
+                  </div> */}
+                  {/* <div className="pt-2">
                     <label>
                       Bank Holder Name <span className="text-red-500">*</span>
                     </label>
@@ -235,9 +237,9 @@ const WithdrawMoney = () => {
                       placeholder="Enter your bank Holder name!"
                       className={`${styles.input} mt-2`}
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="pt-2">
+                  {/* <div className="pt-2">
                     <label>
                       Bank Address <span className="text-red-500">*</span>
                     </label>
@@ -256,7 +258,7 @@ const WithdrawMoney = () => {
                       placeholder="Enter your bank address!"
                       className={`${styles.input} mt-2`}
                     />
-                  </div>
+                  </div> */}
 
                   <button
                     type="submit"
@@ -277,11 +279,10 @@ const WithdrawMoney = () => {
                     <div className="800px:flex w-full justify-between items-center">
                       <div className="800px:w-[50%]">
                         <h5>
-                          Account Number:{' '}
+                          Nomor Rekening:{' '}
                           {'*'.repeat(
-                            seller?.withdrawMethod.bankAccountNumber.length - 3
-                          ) +
-                            seller?.withdrawMethod.bankAccountNumber.slice(-3)}
+                            seller?.withdrawMethod.bankNumber.length - 3
+                          ) + seller?.withdrawMethod.bankNumber.slice(-3)}
                         </h5>
                         <h5>Bank Name: {seller?.withdrawMethod.bankName}</h5>
                       </div>
@@ -294,7 +295,7 @@ const WithdrawMoney = () => {
                       </div>
                     </div>
                     <br />
-                    <h4>Available Balance: {availableBalance}$</h4>
+                    <h4>Available Balance: {availableBalance}</h4>
                     <br />
                     <div className="800px:flex w-full items-center">
                       <input

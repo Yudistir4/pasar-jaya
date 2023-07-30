@@ -90,7 +90,7 @@ const AdminDashboardMain = () => {
         <div className="w-full p-4">
           <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
           <div className="w-full block 800px:flex items-center justify-between">
-            <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
+            {/* <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
               <div className="flex items-center">
                 <AiOutlineMoneyCollect
                   size={30}
@@ -106,9 +106,9 @@ const AdminDashboardMain = () => {
               <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
                 {adminBalance}
               </h5>
-            </div>
+            </div> */}
 
-            <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
+            <div className="w-full mb-4 800px:w-[45%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
               <div className="flex items-center">
                 <MdBorderClear size={30} className="mr-2" fill="#00000085" />
                 <h3
@@ -117,7 +117,7 @@ const AdminDashboardMain = () => {
                   Semua Penjual
                 </h3>
               </div>
-              <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">
+              <h5 className="pt-2 pl-[36px] text-[22px] font-[45]">
                 {sellers && sellers.length}
               </h5>
               <Link to="/admin-sellers">
@@ -125,7 +125,7 @@ const AdminDashboardMain = () => {
               </Link>
             </div>
 
-            <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
+            <div className="w-full mb-4 800px:w-[45%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
               <div className="flex items-center">
                 <AiOutlineMoneyCollect
                   size={30}

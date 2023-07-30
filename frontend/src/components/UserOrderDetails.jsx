@@ -92,7 +92,7 @@ const UserOrderDetails = () => {
           return (
             <div className="w-full flex items-start mb-5">
               <img
-                src={`/${item.images[0]}`}
+                src={`${item.images[0]}`}
                 alt=""
                 className="w-[80x] h-[80px]"
               />
@@ -102,7 +102,7 @@ const UserOrderDetails = () => {
                   Rp {item.discountPrice} x {item.qty}
                 </h5>
               </div>
-              {!item.isReviewed && data?.status === 'Delivered' ? (
+              {!item.isReviewed && data?.status === 'Terkirim' ? (
                 <div
                   className={`${styles.button} text-[#fff]`}
                   onClick={() => setOpen(true) || setSelectedItem(item)}
@@ -131,7 +131,7 @@ const UserOrderDetails = () => {
             <br />
             <div className="w-full flex">
               <img
-                src={`/${selectedItem?.images[0]}`}
+                src={`${selectedItem?.images[0]}`}
                 alt=""
                 className="w-[80px] h-[80px]"
               />

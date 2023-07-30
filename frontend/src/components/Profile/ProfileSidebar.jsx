@@ -15,8 +15,13 @@ import { toast } from 'react-toastify';
 import { resetCart } from '../../redux/actions/cart';
 import { server } from '../../server';
 import { resetWishlist } from '../../redux/actions/wishlist';
+import Cookies from 'js-cookie';
 
 const ProfileSidebar = ({ setActive, active }) => {
+  const getCookieHandler = () => {
+    const cookieValue = Cookies.get('token');
+    console.log('Cookie Value:', cookieValue);
+  };
   const dispatch = useDispatch();
   const resetCartHandler = () => {
     dispatch(resetCart());
@@ -27,13 +32,15 @@ const ProfileSidebar = ({ setActive, active }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const logoutHandler = () => {
+    getCookieHandler();
     axios
       .get(`${server}/user/logout`, { withCredentials: true })
       .then((res) => {
         toast.success(res.data.message);
-        // window.location.reload(true);
+        getCookieHandler();
         resetCartHandler();
         resetWishlistHandler();
+        window.location.reload(true);
         // navigate('/login');
       })
       .catch((error) => {

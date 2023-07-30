@@ -4,12 +4,12 @@ export const navItems = [
     title: 'Halaman Utama',
     url: '/',
   },
+  // {
+  //   title: 'Penjualan terbaik',
+  //   url: '/best-selling',
+  // },
   {
-    title: 'Penjualan terbaik',
-    url: '/best-selling',
-  },
-  {
-    title: 'Produk',
+    title: 'Semua Produk',
     url: '/products',
   },
   // {

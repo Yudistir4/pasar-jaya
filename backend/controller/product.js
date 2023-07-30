@@ -126,6 +126,7 @@ router.put(
         rating,
         comment,
         productId,
+        createdAt: new Date(),
       };
 
       const isReviewed = product.reviews.find(

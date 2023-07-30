@@ -12,46 +12,106 @@ const AllWithdraw = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [withdrawData, setWithdrawData] = useState();
-  const [withdrawStatus, setWithdrawStatus] = useState('Processing');
+  const [withdrawCurrentStatus, setWithdrawCurrentStatus] =
+    useState('Diproses');
 
-  useEffect(() => {
-    axios
+  const getData = async () => {
+    await axios
       .get(`${server}/withdraw/get-all-withdraw-request`, {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data.withdraws);
         setData(res.data.withdraws);
       })
       .catch((error) => {
         console.log(error.response.data.message);
       });
+  };
+  useEffect(() => {
+    getData();
   }, []);
 
   const columns = [
-    { field: 'id', headerName: 'Withdraw Id', minWidth: 150, flex: 0.7 },
+    // { field: 'id', headerName: 'Withdraw Id', minWidth: 150, flex: 0.7 },
+    {
+      field: ' ',
+      headerName: 'Action',
+      type: 'number',
+      minWidth: 130,
+      flex: 0.6,
+      renderCell: (params) => {
+        return (
+          <BsPencil
+            size={20}
+            className={`${
+              params.row.status !== 'Diproses'
+                ? 'text-gray-600  cursor-not-allowed'
+                : 'text-blue-500'
+            } mr-5 cursor-pointer`}
+            onClick={() => {
+              if (params.row.status === 'Diproses') {
+                setOpen(true);
+                setWithdrawData(params.row);
+                setWithdrawCurrentStatus(params.row.status);
+              }
+            }}
+          />
+        );
+      },
+    },
     {
       field: 'name',
       headerName: 'Shop Name',
       minWidth: 180,
-      flex: 1.4,
+      // flex: 1.4,
+      renderCell: (params) => {
+        console.log(params);
+        return (
+          <Link
+            to={`/shop/preview/${params.row.shopId}`}
+            className="hover:text-blue-500 transition-all"
+          >
+            {params.value}{' '}
+          </Link>
+        );
+      },
     },
-    {
-      field: 'shopId',
-      headerName: 'Shop Id',
-      minWidth: 180,
-      flex: 1.4,
-    },
+    // {
+    //   field: 'availableBalance',
+    //   headerName: 'Saldo',
+    //   minWidth: 100,
+    //   flex: 1.4,
+    // },
     {
       field: 'amount',
       headerName: 'Amount',
-      minWidth: 100,
+      minWidth: 130,
+      flex: 0.6,
+    },
+    {
+      field: 'bankNumber',
+      headerName: 'No Rek',
+      minWidth: 130,
+      flex: 0.6,
+    },
+    {
+      field: 'bankName',
+      headerName: 'Bank',
+      minWidth: 130,
+      flex: 0.6,
+    },
+    {
+      field: 'cardholderName',
+      headerName: 'Atas Nama',
+      minWidth: 150,
       flex: 0.6,
     },
     {
       field: 'status',
       headerName: 'status',
       type: 'text',
-      minWidth: 80,
+      minWidth: 100,
       flex: 0.5,
     },
     {
@@ -61,38 +121,22 @@ const AllWithdraw = () => {
       minWidth: 130,
       flex: 0.6,
     },
-    {
-      field: ' ',
-      headerName: 'Update Status',
-      type: 'number',
-      minWidth: 130,
-      flex: 0.6,
-      renderCell: (params) => {
-        return (
-          <BsPencil
-            size={20}
-            className={`${
-              params.row.status !== 'Pengemasan' ? 'hidden' : ''
-            } mr-5 cursor-pointer`}
-            onClick={() => setOpen(true) || setWithdrawData(params.row)}
-          />
-        );
-      },
-    },
   ];
 
   const handleSubmit = async () => {
+    console.log(withdrawData);
     await axios
       .put(
         `${server}/withdraw/update-withdraw-request/${withdrawData.id}`,
         {
           sellerId: withdrawData.shopId,
+          status: withdrawCurrentStatus,
         },
         { withCredentials: true }
       )
       .then((res) => {
         toast.success('Withdraw request updated successfully!');
-        setData(res.data.withdraws);
+        getData();
         setOpen(false);
       });
   };
@@ -108,6 +152,8 @@ const AllWithdraw = () => {
         amount: 'Rp ' + item.amount,
         status: item.status,
         createdAt: item.createdAt.slice(0, 10),
+        availableBalance: item.seller.availableBalance,
+        ...item.seller.withdrawMethod,
       });
     });
   return (
@@ -134,19 +180,24 @@ const AllWithdraw = () => {
             <select
               name=""
               id=""
-              onChange={(e) => setWithdrawStatus(e.target.value)}
+              value={withdrawCurrentStatus}
+              onChange={(e) => setWithdrawCurrentStatus(e.target.value)}
               className="w-[200px] h-[35px] border rounded"
+              defaultValue="Diproses"
             >
-              <option value={withdrawStatus}>{withdrawData.status}</option>
-              <option value={withdrawStatus}>Succeed</option>
+              <option value="Diproses">{withdrawData.status}</option>
+              <option value="Berhasil">Berhasil</option>
+              <option value="Gagal">Gagal</option>
             </select>
-            <button
-              type="submit"
-              className={`block ${styles.button} text-white !h-[42px] mt-4 text-[18px]`}
-              onClick={handleSubmit}
-            >
-              Update
-            </button>
+            {withdrawCurrentStatus !== 'Diproses' && (
+              <button
+                type="submit"
+                className={`block ${styles.button} text-white !h-[42px] mt-4 text-[18px]`}
+                onClick={handleSubmit}
+              >
+                Update
+              </button>
+            )}
           </div>
         </div>
       )}
