@@ -34,8 +34,11 @@ const Checkout = () => {
   );
 
   const processPayment = async () => {
+    const timeStamp = Date.now();
+    const order_id = `${cart[0]._id}_${timeStamp}` ;
+    console.log("ini id nya di payment",order_id)
     const data = {
-      order_id: '1',
+      order_id: order_id,
       total: subTotalPrice,
     };
 
@@ -60,7 +63,7 @@ const Checkout = () => {
   }, []);
 
   const paymentSubmit = () => {
-    if (address1 === '' || address2 === '' || zipCode === null) {
+    if (address1 === ''|| zipCode === null) {
       toast.error('Please choose your delivery address!');
     } else {
       const shippingAddress = {
