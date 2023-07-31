@@ -60,6 +60,7 @@ const OrderDetails = () => {
   };
 
   console.log(data?.status);
+  console.log({ data });
 
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
@@ -128,8 +129,8 @@ const OrderDetails = () => {
         <div className="w-full 800px:w-[40%]">
           <h4 className="pt-3 text-[20px]">Info Pembayaran:</h4>
           <h4>
-            Status:{' '}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : 'Not Paid'}
+            Status:Paid
+            {/* {data?.paymentInfo?.status ? data?.paymentInfo?.status : 'Not Paid'} */}
           </h4>
         </div>
       </div>

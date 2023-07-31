@@ -1,8 +1,11 @@
-import React from "react";
-import Footer from "../components/Layout/Footer";
-import Header from "../components/Layout/Header";
-import Lottie from "react-lottie";
-import animationData from "../Assests/animations/107043-success.json";
+import React, { useEffect } from 'react';
+import Footer from '../components/Layout/Footer';
+import Header from '../components/Layout/Header';
+import Lottie from 'react-lottie';
+import animationData from '../Assests/animations/107043-success.json';
+import { server } from '../server';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const OrderSuccessPage = () => {
   return (
@@ -15,14 +18,43 @@ const OrderSuccessPage = () => {
 };
 
 const Success = () => {
+  const { user } = useSelector((state) => state.user);
   const defaultOptions = {
     loop: false,
     autoplay: true,
     animationData: animationData,
     rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
+      preserveAspectRatio: 'xMidYMid slice',
     },
   };
+
+  // useEffect
+
+  useEffect(() => {
+    const createOrder = async () => {
+      const orderData = JSON.parse(localStorage.getItem('latestOrder'));
+      const order = {
+        cart: orderData?.cart,
+        shippingAddress: orderData?.shippingAddress,
+        user: user && user,
+        totalPrice: orderData?.totalPrice,
+      };
+      order.paymentInfo = {
+        // id: 1,
+        status: 'succeeded',
+        // type: 'Paypal',
+      };
+      console.log(order);
+
+      await axios.post(`${server}/order/create-order`, order).then((res) => {
+        console.log('create-order success');
+        localStorage.setItem('cartItems', JSON.stringify([]));
+        localStorage.setItem('latestOrder', JSON.stringify(null));
+      });
+    };
+    createOrder();
+  }, []);
+
   return (
     <div>
       <Lottie options={defaultOptions} width={300} height={300} />

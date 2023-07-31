@@ -6,6 +6,14 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { server } from '../../server';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
+const ongkirList = {
+  'Jakarta Utara': 25000,
+  'Jakarta Timur': 22000,
+  'Jakarta Selatan': 10000,
+  'Jakarta Barat': 20000,
+  'Jakarta Pusat': 21000,
+};
 
 const Checkout = () => {
   const { user } = useSelector((state) => state.user);
@@ -13,86 +21,127 @@ const Checkout = () => {
   const [userInfo, setUserInfo] = useState(false);
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
-  const [zipCode, setZipCode] = useState(null);
+  const [city, setCity] = useState('');
+  const [ongkir, setOngkir] = useState(0);
+  const [zipCode, setZipCode] = useState('');
+  const [token, setToken] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
-  const [token, setToken] = useState('');
-  const navigate = useNavigate();
-  const [orderData, setOrderData] = useState([]);
 
-  console.log('token di checkout', token);
+  const navigate = useNavigate();
+  // const [orderData, setOrderData] = useState([]);
 
   useEffect(() => {
-    const orderData = JSON.parse(localStorage.getItem('latestOrder'));
-    setOrderData(orderData);
+    if (city) {
+      setOngkir(ongkirList[city]);
+    }
+  }, [city]);
+
+  useEffect(() => {
+    const midtransUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    let scriptTag = document.createElement('script');
+    scriptTag.src = midtransUrl;
+
+    const midtransClientKey = 'SB-Mid-client-cPEvXXaqSJcB69yp';
+    scriptTag.setAttribute('data-client-key', midtransClientKey);
+    document.body.appendChild(scriptTag);
+
+    // return () => {
+    //   document.body.removeChild(scriptTag);
+    // };
   }, []);
+
+  // useEffect(() => {
+  //   const orderData = JSON.parse(localStorage.getItem('latestOrder'));
+  //   console.log(orderData);
+  //   setOrderData(orderData);
+  // }, []);
 
   const subTotalPrice = cart.reduce(
     (acc, item) => acc + item.qty * item.discountPrice,
     0
   );
 
-  const processPayment = async () => {
-    const timeStamp = Date.now();
-    const order_id = `${cart[0]._id}_${timeStamp}` ;
-    console.log("ini id nya di payment",order_id)
-    const data = {
-      order_id: order_id,
-      total: subTotalPrice,
-    };
+  const discountPercentenge = couponCodeData ? discountPrice : '';
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  let totalPrice = couponCodeData
+    ? subTotalPrice - discountPercentenge
+    : subTotalPrice;
+
+  totalPrice += ongkir;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  console.log(totalPrice);
+  const handleOpenPayment = (token) => {
+    if (token) {
+      window.snap.pay(token, {
+        onSuccess: (result) => {
+          console.log('success:', result);
+          console.log('success:', result.order_id);
+          navigate(
+            `/order/success?order_id=${result.order_id}&transaction_status=${result.transaction_status}`
+          );
+        },
+        onPending: (result) => {
+          console.log('pending:', result);
+        },
+        onError: (error) => {
+          console.log('error:', error);
+          console.log(error);
+        },
+        onClose: (result) => {
+          console.log('close:', result);
+          console.log('Anda belum menyelesaikan pembayaran');
+        },
+      });
+    }
+  };
+
+  const paymentSubmit = async () => {
+    if (address1 === '' || zipCode === '' || city === '') {
+      toast.error('Some field is empty');
+      return;
+    }
+
+    const data = {
+      order_id: uuidv4(),
+      total: totalPrice,
     };
 
     const response = await axios.post(
       `${server}/payment/process-transaction`,
-      data,
-      config
+      data
     );
 
     console.log('responnya nih ', response);
-    setToken(response.data.token);
-  };
+    const token = response.data.token;
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    handleOpenPayment(token);
+    setToken(token);
+    const shippingAddress = {
+      address1,
+      zipCode,
+      city,
+    };
 
-  const paymentSubmit = () => {
-    if (address1 === ''|| zipCode === null) {
-      toast.error('Please choose your delivery address!');
-    } else {
-      const shippingAddress = {
-        address1,
-        address2,
-        zipCode,
-      };
-
-      const orderData = {
-        cart,
-        totalPrice,
-        subTotalPrice,
-        shipping,
-        discountPrice,
-        shippingAddress,
-        user,
-      };
-
-      // update local storage with the updated orders array
-      localStorage.setItem('latestOrder', JSON.stringify(orderData));
-      localStorage.setItem('tokenPayment', JSON.stringify(token));
-      navigate('/payment');
-    }
-
-    // alert("payment in construction")
+    const orderData = {
+      cart,
+      totalPrice,
+      subTotalPrice,
+      // shipping,
+      discountPrice,
+      shippingAddress,
+      user,
+    };
+    console.log({ orderData });
+    localStorage.setItem('latestOrder', JSON.stringify(orderData));
+    // localStorage.setItem('tokenPayment', JSON.stringify(token));
+    // navigate('/payment');
   };
 
   // this is shipping cost variable
-  const shipping = subTotalPrice * 0.1;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,14 +175,6 @@ const Checkout = () => {
     });
   };
 
-  const discountPercentenge = couponCodeData ? discountPrice : '';
-
-  const totalPrice = couponCodeData
-    ? (subTotalPrice - discountPercentenge).toFixed(2)
-    : subTotalPrice.toFixed(2);
-
-  console.log(discountPercentenge);
-
   return (
     <div className="w-full flex flex-col items-center py-8">
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
@@ -145,6 +186,8 @@ const Checkout = () => {
             address1={address1}
             setAddress1={setAddress1}
             address2={address2}
+            city={city}
+            setCity={setCity}
             setAddress2={setAddress2}
             zipCode={zipCode}
             setZipCode={setZipCode}
@@ -152,17 +195,21 @@ const Checkout = () => {
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
           <CartData
+            ongkir={ongkir}
             handleSubmit={handleSubmit}
             totalPrice={totalPrice}
-            shipping={shipping}
             subTotalPrice={subTotalPrice}
             couponCode={couponCode}
             setCouponCode={setCouponCode}
             discountPercentenge={discountPercentenge}
+            handleOpenPayment={handleOpenPayment}
+            paymentSubmit={paymentSubmit}
+            token={token}
           />
         </div>
       </div>
-      {token ? (
+
+      {/* {token ? (
         <div
           className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
           onClick={paymentSubmit}
@@ -176,22 +223,18 @@ const Checkout = () => {
         >
           <h5 className="text-white">Simpan Pesanan</h5>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
 const ShippingInfo = ({
   user,
-  country,
-  setCountry,
+
   city,
   setCity,
-  userInfo,
-  setUserInfo,
   address1,
   setAddress1,
-  address2,
   setAddress2,
   zipCode,
   setZipCode,
@@ -233,6 +276,54 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
+            <label className="block pb-2">Pilih dari alamat tersimpan</label>
+
+            <select
+              className="w-[95%] border h-[40px] rounded-[5px]"
+              onChange={(e) => {
+                user?.addresses.forEach((item) => {
+                  if (item.addressType === e.target.value) {
+                    setCity(item.city);
+                    setAddress1(item.address1);
+                    setAddress2(item.address2);
+                    setZipCode(item.zipCode);
+                  } else if (e.target.value === '') {
+                    setCity('');
+                    setAddress1('');
+                    setAddress2('');
+                    setZipCode('');
+                  }
+                });
+              }}
+            >
+              <option className="block pb-2" value="">
+                Pilih Alamat
+              </option>
+              {user?.addresses.map((item) => (
+                <option
+                  key={item.addressType}
+                  className="block pb-2"
+                  value={item.addressType}
+                >
+                  {item.addressType}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="w-full flex pb-3">
+          <div className="w-[50%]">
+            <label className="block pb-2">Alamat</label>
+            <input
+              type="text"
+              required
+              value={address1}
+              onChange={(e) => setAddress1(e.target.value)}
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+          <div className="w-[50%]">
             <label className="block pb-2">Kode Pos</label>
             <input
               type="number"
@@ -240,19 +331,6 @@ const ShippingInfo = ({
               onChange={(e) => setZipCode(e.target.value)}
               required
               className={`${styles.input}`}
-            />
-          </div>
-        </div>
-
-        <div className="w-full flex pb-3">
-          <div className="w-[50%]">
-            <label className="block pb-2">Alamat 1</label>
-            <input
-              type="address"
-              required
-              value={address1}
-              onChange={(e) => setAddress1(e.target.value)}
-              className={`${styles.input} !w-[95%]`}
             />
           </div>
           {/* <div className="w-[50%]">
@@ -268,30 +346,36 @@ const ShippingInfo = ({
         </div>
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
-            <label className="block pb-2">Jasa pengiriman</label>
+            <label className="block pb-2">Kota</label>
             <select
               className="w-[95%] border h-[40px] rounded-[5px]"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
             >
               <option className="block pb-2" value="">
-                Pilih Jasa Pengiriman
+                Pilih Kota
               </option>
-              <option className="block pb-2" value="">
-                Gojek Instan
+              <option className="block pb-2" value="Jakarta Barat">
+                Jakarta Barat
               </option>
-              <option className="block pb-2" value="">
-                Grab Instan
+              <option className="block pb-2" value="Jakarta Timur">
+                Jakarta Timur
               </option>
-              <option className="block pb-2" value="">
-                Ambil di Toko
+              <option className="block pb-2" value="Jakarta Utara">
+                Jakarta Utara
+              </option>
+              <option className="block pb-2" value="Jakarta Utara">
+                Jakarta Utara
+              </option>
+              <option className="block pb-2" value="Jakarta Selatan">
+                Jakarta Selatan
               </option>
             </select>
           </div>
         </div>
-        <div></div>
       </form>
-      <h5
+
+      {/* <h5
         className="text-[18px] cursor-pointer inline-block"
         onClick={() => setUserInfo(!userInfo)}
       >
@@ -301,32 +385,34 @@ const ShippingInfo = ({
         <div>
           {user &&
             user.addresses.map((item, index) => (
-              <div className="w-full flex mt-1">
+              <div key={index} className="w-full flex mt-1">
                 <input
                   type="checkbox"
                   className="mr-3"
                   value={item.addressType}
-                  onClick={() =>
-                    setAddress1(item.address1) ||
-                    setAddress2(item.address2) ||
-                    setZipCode(item.zipCode) ||
-                    setCountry(item.country) ||
-                    setCity(item.city)
-                  }
+                  onClick={() => {
+                    setCity(item.city);
+                    setAddress1(item.address1);
+                    setAddress2(item.address2);
+                    setZipCode(item.zipCode);
+                  }}
                 />
                 <h2>{item.addressType}</h2>
               </div>
             ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
 const CartData = ({
+  ongkir,
   handleSubmit,
   totalPrice,
-  shipping,
+  token,
+  handleOpenPayment,
+  paymentSubmit,
   subTotalPrice,
   couponCode,
   setCouponCode,
@@ -337,6 +423,10 @@ const CartData = ({
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Subtotal:</h3>
         <h5 className="text-[18px] font-[600]">Rp {subTotalPrice}</h5>
+      </div>
+      <div className="flex justify-between">
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Ongkir</h3>
+        <h5 className="text-[18px] font-[600]">Rp {ongkir}</h5>
       </div>
       <br />
       <br />
@@ -364,6 +454,21 @@ const CartData = ({
           type="submit"
         />
       </form>
+      <div
+        className={`${styles.button} w-full `}
+        onClick={
+          () => {
+            if (token) {
+              handleOpenPayment(token);
+            } else {
+              paymentSubmit();
+            }
+          }
+          // handleOpenPayment
+        }
+      >
+        <h5 className="text-white">Bayar Sekarang</h5>
+      </div>
     </div>
   );
 };

@@ -567,7 +567,7 @@ const Address = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (addressType === '' || country === '' || city === '') {
+    if (addressType === '' || city === '') {
       toast.error('Please fill all the fields!');
     } else {
       dispatch(
@@ -614,31 +614,6 @@ const Address = () => {
               <form aria-required onSubmit={handleSubmit} className="w-full">
                 <div className="w-full block p-4">
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Negara</label>
-                    <select
-                      name=""
-                      id=""
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
-                    >
-                      <option value="" className="block border pb-2">
-                        Pilih Negara
-                      </option>
-                      {Country &&
-                        Country.getAllCountries().map((item) => (
-                          <option
-                            className="block pb-2"
-                            key={item.isoCode}
-                            value={item.isoCode}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-
-                  <div className="w-full pb-2">
                     <label className="block pb-2">Pilih Kota</label>
                     <select
                       name=""
@@ -650,21 +625,22 @@ const Address = () => {
                       <option value="" className="block border pb-2">
                         Pilih Kota
                       </option>
-                      {State &&
-                        State.getStatesOfCountry(country).map((item) => (
-                          <option
-                            className="block pb-2"
-                            key={item.isoCode}
-                            value={item.isoCode}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
+                      {[
+                        'Jakarta Barat',
+                        'Jakarta Timur',
+                        'Jakarta Utara',
+                        'Jakarta Pusat',
+                        'Jakarta Selatan',
+                      ].map((item) => (
+                        <option className="block pb-2" key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Alamat 1</label>
+                    <label className="block pb-2">Alamat</label>
                     <input
                       type="address"
                       className={`${styles.input}`}
@@ -758,7 +734,7 @@ const Address = () => {
             </div>
             <div className="pl-8 flex items-center">
               <h6 className="text-[12px] 800px:text-[unset]">
-                {item.address1} {item.address2}
+                {item.address1}
               </h6>
             </div>
             <div className="pl-8 flex items-center">
