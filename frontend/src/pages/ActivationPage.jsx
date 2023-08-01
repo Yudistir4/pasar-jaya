@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { server } from "../server";
+import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { server } from '../server';
 
 const ActivationPage = () => {
   const { activation_token } = useParams();
@@ -24,24 +24,31 @@ const ActivationPage = () => {
       };
       sendRequest();
     }
-  }, []);
+  }, [activation_token]);
 
   return (
     <div
       style={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {error ? (
-        <p>Your token is expired!</p>
+        <div className="textx-center flex flex-col justify-center items-center gap-4">
+          <p>Your token is expired!</p>
+          <Link to={`/`} className="text-blue-500">
+            Back to home page
+          </Link>
+        </div>
       ) : (
-        <div>
-        <p>Your account has been created suceessfully!</p>
-        <a href={`http://localhost:3000/login`}>Back to home</a>
+        <div className="textx-center flex flex-col justify-center items-center gap-4">
+          <p>Your account has been created suceessfully!</p>
+          <Link to={`/login`} className="text-blue-500">
+            Back to login page
+          </Link>
         </div>
       )}
     </div>

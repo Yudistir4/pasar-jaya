@@ -17,25 +17,16 @@ router.post('/create-shop', upload.single('file'), async (req, res, next) => {
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
     if (sellerEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: 'Error deleting file' });
-        }
-      });
       return next(new ErrorHandler('User already exists', 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
+ 
 
     const seller = {
       name: req.body.name,
       email: email,
       password: req.body.password,
-      avatar: fileUrl,
+      avatar: req.file.path,
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
       zipCode: req.body.zipCode,
@@ -43,7 +34,7 @@ router.post('/create-shop', upload.single('file'), async (req, res, next) => {
 
     const activationToken = createActivationToken(seller);
 
-    const activationUrl = `http://localhost:3000/seller-activation/${activationToken}`;
+    const activationUrl = `${process.env.FRONTEND_URL}/seller-activation/${activationToken}`;
 
     try {
       await sendMail({

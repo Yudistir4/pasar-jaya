@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'PRODUCTION') {
 
 app.use(
   cors({
-    origin: process.env.ORIGIN,
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );

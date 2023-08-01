@@ -17,30 +17,19 @@ router.post('/create-user', upload.single('file'), async (req, res, next) => {
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: 'Error deleting file' });
-        }
-      });
       return next(new ErrorHandler('User already exists', 400));
     }
-
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
 
     const user = {
       name: name,
       email: email,
       password: password,
-      avatar: fileUrl,
+      avatar: req.file.path,
     };
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+    const activationUrl = `${process.env.FRONTEND_URL}/activation/${activationToken}`;
 
     try {
       await sendMail({
@@ -96,7 +85,11 @@ router.post(
         password,
       });
 
-      sendToken(user, 201, res);
+      // sendToken(user, 201, res);
+      res.status(201).json({
+        success: true,
+        message: 'Activation successful',
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
