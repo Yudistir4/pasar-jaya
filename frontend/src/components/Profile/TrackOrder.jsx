@@ -8,11 +8,12 @@ const TrackOrder = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  console.log(orders);
   const { id } = useParams();
 
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   const data = orders && orders.find((item) => item._id === id);
 
@@ -38,7 +39,7 @@ const TrackOrder = () => {
           <h1 className="text-[20px]">
             Our Delivery man is going to deliver your order.
           </h1>
-        ) : data?.status === 'Delivered' ? (
+        ) : data?.status === 'Terkirim' ? (
           <h1 className="text-[20px]">Your order is delivered!</h1>
         ) : data?.status === 'Processing refund' ? (
           <h1 className="text-[20px]">Your refund is processing!</h1>
