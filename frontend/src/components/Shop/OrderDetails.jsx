@@ -7,6 +7,8 @@ import { getAllOrdersOfShop } from '../../redux/actions/order';
 import { backend_url, server } from '../../server';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Store from '../../redux/store';
+import { loadSeller } from '../../redux/actions/user';
 
 const OrderDetails = () => {
   const { orders, isLoading } = useSelector((state) => state.order);
@@ -34,6 +36,7 @@ const OrderDetails = () => {
       )
       .then((res) => {
         toast.success('Order updated!');
+        if (status === 'Terkirim') Store.dispatch(loadSeller());
         navigate('/dashboard-orders');
       })
       .catch((error) => {

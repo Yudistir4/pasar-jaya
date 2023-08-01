@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { AiOutlinePlusCircle } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createProduct } from "../../redux/actions/product";
-import { categoriesData } from "../../static/data";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createProduct } from '../../redux/actions/product';
+import { categoriesData } from '../../static/data';
+import { toast } from 'react-toastify';
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -13,10 +13,10 @@ const CreateProduct = () => {
   const dispatch = useDispatch();
 
   const [images, setImages] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [tags, setTags] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [tags, setTags] = useState('');
   const [originalPrice, setOriginalPrice] = useState();
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
@@ -26,8 +26,8 @@ const CreateProduct = () => {
       toast.error(error);
     }
     if (success) {
-      toast.success("Product created successfully!");
-      navigate("/dashboard");
+      toast.success('Product created successfully!');
+      navigate('/dashboard-products');
       window.location.reload();
     }
   }, [dispatch, error, success]);
@@ -47,16 +47,16 @@ const CreateProduct = () => {
     const newForm = new FormData();
 
     images.forEach((image) => {
-      newForm.append("images", image);
+      newForm.append('images', image);
     });
-    newForm.append("name", name);
-    newForm.append("description", description);
-    newForm.append("category", category);
-    newForm.append("tags", tags);
-    newForm.append("originalPrice", originalPrice);
-    newForm.append("discountPrice", discountPrice);
-    newForm.append("stock", stock);
-    newForm.append("shopId", seller._id);
+    newForm.append('name', name);
+    newForm.append('description', description);
+    newForm.append('category', category);
+    newForm.append('tags', tags);
+    newForm.append('originalPrice', originalPrice);
+    newForm.append('discountPrice', discountPrice);
+    newForm.append('stock', stock);
+    newForm.append('shopId', seller._id);
     dispatch(createProduct(newForm));
   };
 

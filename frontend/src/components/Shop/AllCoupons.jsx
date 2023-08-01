@@ -1,24 +1,24 @@
-import { Button } from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
-import { RxCross1 } from "react-icons/rx";
-import { useDispatch, useSelector } from "react-redux";
-import styles from "../../styles/styles";
-import Loader from "../Layout/Loader";
-import { server } from "../../server";
-import { toast } from "react-toastify";
+import { Button } from '@material-ui/core';
+import { DataGrid } from '@material-ui/data-grid';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { RxCross1 } from 'react-icons/rx';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from '../../styles/styles';
+import Loader from '../Layout/Loader';
+import { server } from '../../server';
+import { toast } from 'react-toastify';
 
 const AllCoupons = () => {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [coupouns,setCoupouns] = useState([]);
+  const [coupouns, setCoupouns] = useState([]);
   const [minAmount, setMinAmout] = useState(null);
   const [maxAmount, setMaxAmount] = useState(null);
   const [selectedProducts, setSelectedProducts] = useState(null);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(1);
   const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
 
@@ -40,15 +40,18 @@ const AllCoupons = () => {
   }, [dispatch]);
 
   const handleDelete = async (id) => {
-    axios.delete(`${server}/coupon/delete-coupon/${id}`,{withCredentials: true}).then((res) => {
-      toast.success("Coupon code deleted succesfully!")
-    })
+    axios
+      .delete(`${server}/coupon/delete-coupon/${id}`, { withCredentials: true })
+      .then((res) => {
+        toast.success('Coupon code deleted succesfully!');
+      });
     window.location.reload();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // if (name === '' || value === 0) return;
     await axios
       .post(
         `${server}/coupon/create-coupon-code`,
@@ -63,9 +66,9 @@ const AllCoupons = () => {
         { withCredentials: true }
       )
       .then((res) => {
-       toast.success("Coupon code created successfully!");
-       setOpen(false);
-       window.location.reload();
+        toast.success('Coupon code created successfully!');
+        setOpen(false);
+        window.location.reload();
       })
       .catch((error) => {
         toast.error(error.response.data.message);
@@ -73,25 +76,25 @@ const AllCoupons = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "Id", minWidth: 150, flex: 0.7 },
+    { field: 'id', headerName: 'Id', minWidth: 150, flex: 0.7 },
     {
-      field: "name",
-      headerName: "Kode Voucher",
+      field: 'name',
+      headerName: 'Kode Voucher',
       minWidth: 180,
       flex: 1.4,
     },
     {
-      field: "price",
-      headerName: "Nilai",
+      field: 'price',
+      headerName: 'Nilai',
       minWidth: 100,
       flex: 0.6,
     },
     {
-      field: "Hapus",
+      field: 'Hapus',
       flex: 0.8,
       minWidth: 120,
-      headerName: "",
-      type: "number",
+      headerName: '',
+      type: 'number',
       sortable: false,
       renderCell: (params) => {
         return (
@@ -108,11 +111,11 @@ const AllCoupons = () => {
   const row = [];
 
   coupouns &&
-  coupouns.forEach((item) => {
+    coupouns.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
-        price: item.value + " %",
+        price: item.value + ' %',
         sold: 10,
       });
     });
@@ -140,7 +143,7 @@ const AllCoupons = () => {
           />
           {open && (
             <div className="fixed top-0 left-0 w-full h-screen bg-[#00000062] z-[20000] flex items-center justify-center">
-              <div className="w-[90%] 800px:w-[40%] h-[80vh] bg-white rounded-md shadow p-4">
+              <div className="w-[90%] 800px:w-[40%]  overflow-y-auto  bg-white rounded-md shadow p-4">
                 <div className="w-full flex justify-end">
                   <RxCross1
                     size={30}
@@ -171,11 +174,12 @@ const AllCoupons = () => {
                   <br />
                   <div>
                     <label className="pb-2">
-                      Persentasi voucher{" "}
-                      <span className="text-red-500">*</span>
+                      Persentasi voucher <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="text"
+                      type="number"
+                      max={100}
+                      min={1}
                       name="value"
                       value={value}
                       required
@@ -184,7 +188,7 @@ const AllCoupons = () => {
                       placeholder="Enter your coupon code value..."
                     />
                   </div>
-                  <br />
+                  {/* <br />
                   <div>
                     <label className="pb-2">Jumlah Minimum</label>
                     <input
@@ -208,8 +212,8 @@ const AllCoupons = () => {
                       placeholder="Enter your coupon code max amount..."
                     />
                   </div>
-                  <br />
-                  <div>
+                  <br /> */}
+                  {/* <div>
                     <label className="pb-2">Produk yang dipilih</label>
                     <select
                       className="w-full mt-2 border h-[35px] rounded-[5px]"
@@ -226,8 +230,8 @@ const AllCoupons = () => {
                           </option>
                         ))}
                     </select>
-                  </div>
-                  <br />
+                  </div> */}
+                  {/* <br /> */}
                   <div>
                     <input
                       type="submit"

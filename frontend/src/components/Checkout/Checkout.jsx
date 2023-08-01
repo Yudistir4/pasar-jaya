@@ -165,7 +165,7 @@ const Checkout = () => {
           const discountPrice = (eligiblePrice * couponCodeValue) / 100;
           setDiscountPrice(discountPrice);
           setCouponCodeData(res.data.couponCode);
-          setCouponCode('');
+          // setCouponCode('');
         }
       }
       if (res.data.couponCode === null) {
@@ -180,6 +180,8 @@ const Checkout = () => {
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
         <div className="w-full 800px:w-[65%]">
           <ShippingInfo
+            couponCodeData={couponCodeData}
+            token={token}
             user={user}
             userInfo={userInfo}
             setUserInfo={setUserInfo}
@@ -195,6 +197,7 @@ const Checkout = () => {
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
           <CartData
+            couponCodeData={couponCodeData}
             ongkir={ongkir}
             handleSubmit={handleSubmit}
             totalPrice={totalPrice}
@@ -229,8 +232,9 @@ const Checkout = () => {
 };
 
 const ShippingInfo = ({
+  couponCodeData,
   user,
-
+  token,
   city,
   setCity,
   address1,
@@ -279,6 +283,7 @@ const ShippingInfo = ({
             <label className="block pb-2">Pilih dari alamat tersimpan</label>
 
             <select
+              disabled={!!token}
               className="w-[95%] border h-[40px] rounded-[5px]"
               onChange={(e) => {
                 user?.addresses.forEach((item) => {
@@ -318,6 +323,7 @@ const ShippingInfo = ({
             <input
               type="text"
               required
+              disabled={!!token}
               value={address1}
               onChange={(e) => setAddress1(e.target.value)}
               className={`${styles.input} !w-[95%]`}
@@ -326,6 +332,7 @@ const ShippingInfo = ({
           <div className="w-[50%]">
             <label className="block pb-2">Kode Pos</label>
             <input
+              disabled={!!token}
               type="number"
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
@@ -348,6 +355,7 @@ const ShippingInfo = ({
           <div className="w-[50%]">
             <label className="block pb-2">Kota</label>
             <select
+              disabled={!!token}
               className="w-[95%] border h-[40px] rounded-[5px]"
               value={city}
               onChange={(e) => setCity(e.target.value)}
@@ -416,8 +424,14 @@ const CartData = ({
   subTotalPrice,
   couponCode,
   setCouponCode,
+  couponCodeData,
   discountPercentenge,
 }) => {
+  const disableVoucherInput = [!!couponCodeData, !!token].some(
+    (val) => val === true
+  );
+
+  console.log({ disableVoucherInput, couponCode });
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
@@ -441,18 +455,21 @@ const CartData = ({
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          disabled={disableVoucherInput}
           className={`${styles.input} h-[40px] pl-2`}
           placeholder="Kode Voucher"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
           required
         />
-        <input
-          className={`w-full h-[40px] border border-[#f63b60] text-center text-[#f63b60] rounded-[3px] mt-8 cursor-pointer`}
-          required
-          value="Gunakan Voucher"
-          type="submit"
-        />
+        {!disableVoucherInput && (
+          <input
+            className={`w-full h-[40px] border border-[#f63b60] text-center text-[#f63b60] rounded-[3px] mt-8 cursor-pointer`}
+            required
+            value="Gunakan Voucher"
+            type="submit"
+          />
+        )}
       </form>
       <div
         className={`${styles.button} w-full `}
