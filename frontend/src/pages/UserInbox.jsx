@@ -303,7 +303,7 @@ const MessageList = ({
         <img
           src={`${user?.avatar}`}
           alt=""
-          className="w-[50px] h-[50px] rounded-full"
+          className="w-[50px] h-[50px] rounded-full object-cover"
         />
         {online ? (
           <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
@@ -344,10 +344,10 @@ const SellerInbox = ({
           <img
             src={`${userData?.avatar}`}
             alt=""
-            className="w-[60px] h-[60px] rounded-full"
+            className="w-[60px] h-[60px] rounded-full object-cover"
           />
           <div className="pl-3">
-            <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
+            <h1 className="text-[18px] font-[600] ">{userData?.name}</h1>
             <h1>{activeStatus ? 'Active Now' : ''}</h1>
           </div>
         </div>
@@ -372,14 +372,14 @@ const SellerInbox = ({
               {item.sender !== sellerId && (
                 <img
                   src={`${userData?.avatar}`}
-                  className="w-[40px] h-[40px] rounded-full mr-3"
+                  className="w-[40px] h-[40px] rounded-full mr-3 object-cover"
                   alt=""
                 />
               )}
               {item.images && (
                 <img
                   src={`${item.images}`}
-                  className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
+                  className="w-[300px] object-cover h-[300px]  rounded-[10px] ml-2 mb-2"
                 />
               )}
               {item.text && (
