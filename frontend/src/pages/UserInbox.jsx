@@ -9,8 +9,10 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineArrowRight, AiOutlineSend } from 'react-icons/ai';
 import { TfiGallery } from 'react-icons/tfi';
 import styles from '../styles/styles';
-const ENDPOINT = 'https://socket-ecommerce-tu68.onrender.com/';
-const socketId = socketIO(ENDPOINT, { transports: ['websocket'] });
+
+const socketId = socketIO(process.env.REACT_APP_SOCKET_URL, {
+  transports: ['websocket'],
+});
 
 const UserInbox = () => {
   const { user } = useSelector((state) => state.user);
@@ -28,7 +30,12 @@ const UserInbox = () => {
 
   useEffect(() => {
     socketId.on('getMessage', (data) => {
+      console.log({ data });
+
       setArrivalMessage({
+        images: data.images
+          ? URL.createObjectURL(new Blob([data.images]))
+          : null,
         sender: data.senderId,
         text: data.text,
         createdAt: Date.now(),
@@ -95,7 +102,6 @@ const UserInbox = () => {
   // create new message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
-
     const message = {
       sender: user._id,
       text: newMessage,
@@ -357,6 +363,7 @@ const SellerInbox = ({
         {messages &&
           messages.map((item, index) => (
             <div
+              key={item._id + index}
               className={`flex w-full my-2 ${
                 item.sender === sellerId ? 'justify-end' : 'justify-start'
               }`}
@@ -375,7 +382,7 @@ const SellerInbox = ({
                   className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
                 />
               )}
-              {item.text !== '' && (
+              {item.text && (
                 <div>
                   <div
                     className={`w-max p-2 rounded ${

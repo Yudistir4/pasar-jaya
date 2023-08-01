@@ -9,9 +9,10 @@ import styles from '../../styles/styles';
 import { TfiGallery } from 'react-icons/tfi';
 import socketIO from 'socket.io-client';
 import { format } from 'timeago.js';
-const ENDPOINT = 'https://socket-ecommerce-tu68.onrender.com/';
-// const ENDPOINT = 'http://localhost:4000';
-const socketId = socketIO(ENDPOINT, { transports: ['websocket'] });
+
+const socketId = socketIO(process.env.REACT_APP_SOCKET_URL, {
+  transports: ['websocket'],
+});
 
 const DashboardMessages = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -26,10 +27,13 @@ const DashboardMessages = () => {
   const [images, setImages] = useState();
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
-
+  console.log({ newMessage });
   useEffect(() => {
     socketId.on('getMessage', (data) => {
       setArrivalMessage({
+        images: data.images
+          ? URL.createObjectURL(new Blob([data.images]))
+          : null,
         sender: data.senderId,
         text: data.text,
         createdAt: Date.now(),
@@ -95,13 +99,14 @@ const DashboardMessages = () => {
 
   // create new message
   const sendMessageHandler = async (e) => {
+    // debugger;
     e.preventDefault();
-
     const message = {
       sender: seller._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
+    console.log({ message });
 
     const receiverId = currentChat.members.find(
       (member) => member.id !== seller._id
@@ -359,8 +364,10 @@ const SellerInbox = ({
       <div className="px-3 h-[65vh] py-3 overflow-y-scroll">
         {messages &&
           messages.map((item, index) => {
+            console.log({ item });
             return (
               <div
+                key={item._id + index}
                 className={`flex w-full my-2 ${
                   item.sender === sellerId ? 'justify-end' : 'justify-start'
                 }`}
@@ -379,7 +386,7 @@ const SellerInbox = ({
                     className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
                   />
                 )}
-                {item.text !== '' && (
+                {item.text && (
                   <div>
                     <div
                       className={`w-max p-2 rounded ${
