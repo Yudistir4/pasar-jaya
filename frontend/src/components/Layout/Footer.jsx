@@ -22,7 +22,7 @@ const Footer = () => {
         Menjadikan Pasar Bersih sehat dan bersaing secara agronomis, dan menekan
         inflasi daerah khususnya Jakarta Kota Kolaborasi
       </p>
-      <div className="flex items-center  ">
+      <div className="flex items-center  gap-4">
         <a href="https://www.facebook.com/perumdapasarjaya/?locale=id_ID">
           <AiFillFacebook size={25} />
         </a>
