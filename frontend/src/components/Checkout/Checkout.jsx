@@ -273,7 +273,7 @@ const ShippingInfo = ({
           <div className="w-[50%]">
             <label className="block pb-2">Nomor Telepon</label>
             <input
-              type="number"
+              type="text"
               required
               value={user && user.phoneNumber}
               className={`${styles.input} !w-[95%]`}

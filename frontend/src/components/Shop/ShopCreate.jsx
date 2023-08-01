@@ -115,7 +115,7 @@ const ShopCreate = () => {
               </label>
               <div className="mt-1">
                 <input
-                  type="number"
+                  type="text"
                   name="phone-number"
                   required
                   value={phoneNumber}

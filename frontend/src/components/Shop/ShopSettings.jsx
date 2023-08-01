@@ -147,7 +147,7 @@ const ShopSettings = () => {
               <label className="block pb-2">Nomor Telepon Toko</label>
             </div>
             <input
-              type="number"
+              type="text"
               placeholder={seller?.phoneNumber}
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
