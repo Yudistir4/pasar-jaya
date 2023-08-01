@@ -5,7 +5,8 @@ import Lottie from 'react-lottie';
 import animationData from '../Assests/animations/107043-success.json';
 import { server } from '../server';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetCart } from '../redux/actions/cart';
 
 const OrderSuccessPage = () => {
   return (
@@ -18,6 +19,10 @@ const OrderSuccessPage = () => {
 };
 
 const Success = () => {
+  const dispatch = useDispatch();
+  const resetCartHandler = () => {
+    dispatch(resetCart());
+  };
   const { user } = useSelector((state) => state.user);
   const defaultOptions = {
     loop: false,
@@ -44,16 +49,17 @@ const Success = () => {
         status: 'succeeded',
         // type: 'Paypal',
       };
-      console.log(order);
-
-      await axios.post(`${server}/order/create-order`, order).then((res) => {
-        console.log('create-order success');
-        localStorage.setItem('cartItems', JSON.stringify([]));
-        localStorage.setItem('latestOrder', JSON.stringify(null));
-      });
+      if (order) {
+        await axios.post(`${server}/order/create-order`, order).then((res) => {
+          console.log('create-order success');
+          localStorage.setItem('cartItems', JSON.stringify([]));
+          localStorage.setItem('latestOrder', JSON.stringify(null));
+          resetCartHandler();
+        });
+      }
     };
     createOrder();
-  }, []);
+  }, [resetCartHandler]);
 
   return (
     <div>

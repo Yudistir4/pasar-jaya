@@ -364,11 +364,11 @@ const ShippingInfo = ({
               <option className="block pb-2" value="Jakarta Utara">
                 Jakarta Utara
               </option>
-              <option className="block pb-2" value="Jakarta Utara">
-                Jakarta Utara
-              </option>
               <option className="block pb-2" value="Jakarta Selatan">
                 Jakarta Selatan
+              </option>
+              <option className="block pb-2" value="Jakarta Pusat">
+                Jakarta Pusat
               </option>
             </select>
           </div>
