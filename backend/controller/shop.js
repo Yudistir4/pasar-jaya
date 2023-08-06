@@ -20,8 +20,6 @@ router.post('/create-shop', upload.single('file'), async (req, res, next) => {
       return next(new ErrorHandler('User already exists', 400));
     }
 
- 
-
     const seller = {
       name: req.body.name,
       email: email,
@@ -76,8 +74,7 @@ router.post(
       if (!newSeller) {
         return next(new ErrorHandler('Invalid token', 400));
       }
-      const { name, email, password, avatar, zipCode, address, phoneNumber } =
-        newSeller;
+      const { name, email, password, avatar, address, phoneNumber } = newSeller;
 
       let seller = await Shop.findOne({ email });
 
@@ -90,7 +87,7 @@ router.post(
         email,
         avatar,
         password,
-        zipCode,
+
         address,
         phoneNumber,
       });
@@ -99,6 +96,7 @@ router.post(
 
       sendShopToken(seller, 201, res);
     } catch (error) {
+      console.log({ error });
       return next(new ErrorHandler(error.message, 500));
     }
   })

@@ -15,6 +15,7 @@ const OrderDetails = () => {
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
+  const [infoPengiriman, setInfoPengiriman] = useState('');
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -26,14 +27,17 @@ const OrderDetails = () => {
   const data = orders && orders.find((item) => item._id === id);
 
   const orderUpdateHandler = async (e) => {
+    const data = {
+      status,
+    };
+    if (infoPengiriman) {
+      data.infoPengiriman = infoPengiriman;
+    }
+
     await axios
-      .put(
-        `${server}/order/update-order-status/${id}`,
-        {
-          status,
-        },
-        { withCredentials: true }
-      )
+      .put(`${server}/order/update-order-status/${id}`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         toast.success('Order updated!');
         if (status === 'Terkirim') Store.dispatch(loadSeller());
@@ -135,59 +139,95 @@ const OrderDetails = () => {
       </div>
       <br />
       <br />
-      <h4 className="pt-3 text-[20px] font-[600]">Status Pesanan:</h4>
-      {data?.status !== 'Processing refund' &&
-        data?.status !== 'Refund Success' && (
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-          >
-            {['Pending', 'Pengemasan', 'Pengiriman', 'Terkirim', 'Dibatalkan']
-              .slice(
-                [
+
+      <div className="flex gap-10">
+        <div className="flex flex-col">
+          <h4 className=" text-[20px] font-[600]">Status Pesanan:</h4>
+          {data?.status !== 'Processing refund' &&
+            data?.status !== 'Refund Success' && (
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+              >
+                {[
                   'Pending',
                   'Pengemasan',
                   'Pengiriman',
                   'Terkirim',
                   'Dibatalkan',
-                ].indexOf(data?.status)
-              )
-              .map((option, index) => (
-                <option value={option} key={index}>
-                  {option}
-                </option>
-              ))}
-          </select>
-        )}
-      {data?.status === 'Processing refund' ||
-      data?.status === 'Refund Success' ? (
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-        >
-          {['Processing refund', 'Refund Success']
-            .slice(
-              ['Processing refund', 'Refund Success'].indexOf(data?.status)
-            )
-            .map((option, index) => (
-              <option value={option} key={index}>
-                {option}
-              </option>
-            ))}
-        </select>
-      ) : null}
+                ]
+                  .slice(
+                    [
+                      'Pending',
+                      'Pengemasan',
+                      'Pengiriman',
+                      'Terkirim',
+                      'Dibatalkan',
+                    ].indexOf(data?.status)
+                  )
+                  .map((option, index) => (
+                    <option value={option} key={index}>
+                      {option}
+                    </option>
+                  ))}
+              </select>
+            )}
+          {data?.status === 'Processing refund' ||
+          data?.status === 'Refund Success' ? (
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+            >
+              {['Processing refund', 'Refund Success']
+                .slice(
+                  ['Processing refund', 'Refund Success'].indexOf(data?.status)
+                )
+                .map((option, index) => (
+                  <option value={option} key={index}>
+                    {option}
+                  </option>
+                ))}
+            </select>
+          ) : null}
 
-      <div
-        className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}
-        onClick={
-          data?.status !== 'Processing refund'
-            ? orderUpdateHandler
-            : refundOrderUpdateHandler
-        }
-      >
-        Perbarui status
+          <div
+            className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}
+            onClick={
+              data?.status !== 'Processing refund'
+                ? orderUpdateHandler
+                : refundOrderUpdateHandler
+            }
+          >
+            Perbarui status
+          </div>
+        </div>
+
+        <div>
+          <h5 className="text-xl font-semibold">
+            Info Pengiriman [{data?.kurir}]:
+          </h5>
+          {data?.infoPengiriman ? (
+            <p>{data?.infoPengiriman} </p>
+          ) : (
+            status === 'Pengiriman' && (
+              <textarea
+                cols="30"
+                rows="5"
+                value={infoPengiriman}
+                className={`${styles.input} mt-2`}
+                onChange={(e) => setInfoPengiriman(e.target.value)}
+              ></textarea>
+              // <input
+              //   type="te"
+              //   value={infoPengiriman}
+              //   className={`${styles.input} mt-2`}
+              //   onChange={(e) => setInfoPengiriman(e.target.value)}
+              // />
+            )
+          )}
+        </div>
       </div>
     </div>
   );

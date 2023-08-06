@@ -43,6 +43,7 @@ const Success = () => {
         shippingAddress: orderData?.shippingAddress,
         user: user && user,
         totalPrice: orderData?.totalPrice,
+        kurir: orderData?.kurir,
       };
       order.paymentInfo = {
         // id: 1,

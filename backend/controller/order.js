@@ -12,8 +12,9 @@ router.post(
   '/create-order',
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
-
+      const { cart, shippingAddress, user, totalPrice, paymentInfo, kurir } =
+        req.body;
+      console.log({ kurir });
       //   group cart items by shopId
       const shopItemsMap = new Map();
 
@@ -35,6 +36,7 @@ router.post(
           user,
           totalPrice,
           paymentInfo,
+          kurir,
         });
         orders.push(order);
       }
@@ -108,7 +110,11 @@ router.put(
         });
       }
 
-      order.status = req.body.status;
+      const { status, infoPengiriman } = req.body;
+      order.status = status;
+      if (infoPengiriman) {
+        order.infoPengiriman = infoPengiriman;
+      }
 
       if (req.body.status === 'Terkirim') {
         order.deliveredAt = Date.now();

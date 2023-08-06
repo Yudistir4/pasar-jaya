@@ -29,15 +29,9 @@ const ShopCreate = () => {
       address,
       phoneNumber,
     });
-    const isEmpty = [
-      avatar,
-      name,
-      email,
-      password,
-      zipCode,
-      address,
-      phoneNumber,
-    ].some((val) => val === null || val === '');
+    const isEmpty = [avatar, name, email, password, address, phoneNumber].some(
+      (val) => val === null || val === ''
+    );
     console.log({ isEmpty });
     if (isEmpty) {
       toast.error('Fill all field!');
@@ -164,7 +158,7 @@ const ShopCreate = () => {
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
@@ -181,7 +175,7 @@ const ShopCreate = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div>
               <label

@@ -8,11 +8,11 @@ import { server } from '../../server';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 const ongkirList = {
-  'Jakarta Utara': 25000,
-  'Jakarta Timur': 22000,
-  'Jakarta Selatan': 10000,
-  'Jakarta Barat': 20000,
-  'Jakarta Pusat': 21000,
+  'Jakarta Utara': { Gojek: 25000, Grab: 23000, JNE: 15000 },
+  'Jakarta Timur': { Gojek: 22000, Grab: 23000, JNE: 13000 },
+  'Jakarta Selatan': { Gojek: 12000, Grab: 11000, JNE: 10000 },
+  'Jakarta Barat': { Gojek: 24000, Grab: 21000, JNE: 16000 },
+  'Jakarta Pusat': { Gojek: 22000, Grab: 25000, JNE: 15000 },
 };
 
 const Checkout = () => {
@@ -22,6 +22,7 @@ const Checkout = () => {
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
   const [city, setCity] = useState('');
+  const [kurir, setKurir] = useState('Gojek');
   const [ongkir, setOngkir] = useState(0);
   const [zipCode, setZipCode] = useState('');
   const [token, setToken] = useState('');
@@ -30,13 +31,12 @@ const Checkout = () => {
   const [discountPrice, setDiscountPrice] = useState(null);
 
   const navigate = useNavigate();
-  // const [orderData, setOrderData] = useState([]);
-
+  console.log({ kurir });
   useEffect(() => {
-    if (city) {
-      setOngkir(ongkirList[city]);
+    if (city && kurir) {
+      setOngkir(ongkirList[city][kurir]);
     }
-  }, [city]);
+  }, [city, kurir]);
 
   useEffect(() => {
     const midtransUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
@@ -100,7 +100,7 @@ const Checkout = () => {
   };
 
   const paymentSubmit = async () => {
-    if (address1 === '' || zipCode === '' || city === '') {
+    if (address1 === '' || zipCode === '' || city === '' || kurir === '') {
       toast.error('Some field is empty');
       return;
     }
@@ -130,6 +130,7 @@ const Checkout = () => {
       cart,
       totalPrice,
       subTotalPrice,
+      kurir,
       // shipping,
       discountPrice,
       shippingAddress,
@@ -180,6 +181,8 @@ const Checkout = () => {
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
         <div className="w-full 800px:w-[65%]">
           <ShippingInfo
+            kurir={kurir}
+            setKurir={setKurir}
             couponCodeData={couponCodeData}
             token={token}
             user={user}
@@ -242,6 +245,8 @@ const ShippingInfo = ({
   setAddress2,
   zipCode,
   setZipCode,
+  kurir,
+  setKurir,
 }) => {
   return (
     <div className="w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8">
@@ -377,6 +382,28 @@ const ShippingInfo = ({
               </option>
               <option className="block pb-2" value="Jakarta Pusat">
                 Jakarta Pusat
+              </option>
+            </select>
+          </div>
+          <div className="w-[50%]">
+            <label className="block pb-2">Kurir</label>
+            <select
+              disabled={!!token}
+              className="w-[95%] border h-[40px] rounded-[5px]"
+              value={kurir}
+              onChange={(e) => setKurir(e.target.value)}
+            >
+              <option className="block pb-2" value="">
+                Pilih Kurir
+              </option>
+              <option className="block pb-2" value="Gojek">
+                Gojek
+              </option>
+              <option className="block pb-2" value="Grab">
+                Grab
+              </option>
+              <option className="block pb-2" value="JNE">
+                JNE
               </option>
             </select>
           </div>

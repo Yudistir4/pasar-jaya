@@ -21,6 +21,12 @@ const orderSchema = new mongoose.Schema({
     type: String,
     default: 'Pending',
   },
+  kurir: {
+    type: String,
+  },
+  infoPengiriman: {
+    type: String,
+  },
   paymentInfo: {
     id: {
       type: String,

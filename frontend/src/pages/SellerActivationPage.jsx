@@ -9,7 +9,7 @@ const SellerActivationPage = () => {
   const [error, setError] = useState(false);
 
   console.log('aktivasi token', activation_token);
-
+  console.log({ error });
   useEffect(() => {
     if (activation_token) {
       const sendRequest = async () => {

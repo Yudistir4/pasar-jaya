@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { backend_url, server } from '../../server';
 import styles from '../../styles/styles';
 import { DataGrid } from '@material-ui/data-grid';
-import { Button } from '@material-ui/core';
+import { Button, Tab, Tabs } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { MdTrackChanges } from 'react-icons/md';
 import { RxCross1 } from 'react-icons/rx';
@@ -201,7 +201,8 @@ const AllOrders = () => {
   const { user } = useSelector((state) => state.user);
   const { orders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
-
+  const [value, setValue] = useState(0);
+  const [status, setStatus] = useState('Pending');
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
   }, []);
@@ -225,6 +226,13 @@ const AllOrders = () => {
           ? 'greenColor'
           : 'redColor';
       },
+    },
+    {
+      field: 'kurir',
+      headerName: 'Kurir',
+      type: 'string',
+      minWidth: 130,
+      flex: 0.7,
     },
     {
       field: 'itemsQty',
@@ -266,18 +274,34 @@ const AllOrders = () => {
   const row = [];
 
   orders &&
-    orders.forEach((item) => {
-      row.push({
-        id: item._id,
-        namaProduk: item.cart[0].name,
-        itemsQty: item.cart.length,
-        total: 'Rp ' + item.totalPrice,
-        status: item.status,
+    orders
+      .filter((item) => item.status === status)
+      .forEach((item) => {
+        row.push({
+          id: item._id,
+          namaProduk: item.cart[0].name,
+          itemsQty: item.cart.length,
+          total: 'Rp ' + item.totalPrice,
+          status: item.status,
+          kurir: item.kurir,
+        });
       });
-    });
-
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <div className="pl-8 pt-1">
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="basic tabs example"
+      >
+        <Tab label="Pending" onClick={() => setStatus('Pending')} />
+        <Tab label="Pengemasan" onClick={() => setStatus('Pengemasan')} />
+        <Tab label="Pengiriman" onClick={() => setStatus('Pengiriman')} />
+        <Tab label="Terkirim" onClick={() => setStatus('Terkirim')} />
+        <Tab label="Dibatalkan" onClick={() => setStatus('Dibatalkan')} />
+      </Tabs>
       <DataGrid
         rows={row}
         columns={columns}

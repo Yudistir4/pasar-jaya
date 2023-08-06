@@ -240,6 +240,14 @@ const UserOrderDetails = () => {
       </Link> */}
       <br />
       <br />
+      {data?.infoPengiriman && (
+        <div>
+          <h5 className="text-xl font-semibold">
+            Info Pengiriman [{data?.kurir}]:
+          </h5>
+          {data?.infoPengiriman && <div>{data?.infoPengiriman} </div>}
+        </div>
+      )}
     </div>
   );
 };
