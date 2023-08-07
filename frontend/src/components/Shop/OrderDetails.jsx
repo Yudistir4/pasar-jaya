@@ -25,7 +25,7 @@ const OrderDetails = () => {
   }, [dispatch]);
 
   const data = orders && orders.find((item) => item._id === id);
-
+  console.log({ infoPengiriman });
   const orderUpdateHandler = async (e) => {
     const data = {
       status,
@@ -209,7 +209,7 @@ const OrderDetails = () => {
             Info Pengiriman [{data?.kurir}]:
           </h5>
           {data?.infoPengiriman ? (
-            <p>{data?.infoPengiriman} </p>
+            <p className="whitespace-pre-line">{data?.infoPengiriman} </p>
           ) : (
             status === 'Pengiriman' && (
               <textarea

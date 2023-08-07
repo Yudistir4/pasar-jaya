@@ -8,6 +8,7 @@ import { getAllOrdersOfShop } from '../../redux/actions/order';
 import { getAllProductsShop } from '../../redux/actions/product';
 import { Button } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
+import { BarChart } from '@mui/x-charts/BarChart';
 
 const DashboardHero = () => {
   const dispatch = useDispatch();
@@ -87,9 +88,94 @@ const DashboardHero = () => {
         status: item.status,
       });
     });
+
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  // Initialize an object to store monthly totals
+  const monthlyTotals = {};
+
+  // Calculate monthly totals
+  orders &&
+    orders
+      .filter((item) => item.status === 'Terkirim')
+      .forEach((order) => {
+        const createdAt = new Date(order.createdAt);
+        const year = createdAt.getFullYear();
+        const month = createdAt.getMonth();
+
+        const key = `${year}-${month}`;
+
+        if (!monthlyTotals[key]) {
+          monthlyTotals[key] = 0;
+        }
+
+        monthlyTotals[key] += order.totalPrice;
+      });
+  const getMonthName = (monthIndex) => {
+    const monthNames = [
+      'januari',
+      'februari',
+      'march',
+      'april',
+      'mei',
+      'juni',
+      'juli',
+      'augustus',
+      'september',
+      'oktober',
+      'november',
+      'december',
+    ];
+
+    return monthNames[monthIndex];
+  };
+  const sortedMonths = Object.keys(monthlyTotals).sort();
+  console.log({ sortedMonths });
   return (
     <div className="w-full p-8">
       <h3 className="text-[22px] font-Poppins pb-2">Ringkasan</h3>
+      <div className="w-full  ">
+        {sortedMonths.length > 0 && (
+          <BarChart
+            style={{ padding: '10px' }}
+            className="!p-5"
+            m={4}
+            xAxis={[
+              {
+                id: 'barCategories',
+                data: sortedMonths.map((key) => {
+                  const [year, month] = key.split('-');
+                  return getMonthName(parseInt(month));
+                  // <td>${monthlyTotals[key]}</td>
+                }),
+                scaleType: 'band',
+              },
+            ]}
+            series={[
+              {
+                data: sortedMonths.map((key) => {
+                  return monthlyTotals[key];
+                }),
+              },
+            ]}
+            // width={300}
+            height={300}
+          />
+        )}
+      </div>
       <div className="w-full block 800px:flex items-center justify-between">
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">

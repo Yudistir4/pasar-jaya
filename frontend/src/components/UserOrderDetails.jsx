@@ -245,7 +245,7 @@ const UserOrderDetails = () => {
           <h5 className="text-xl font-semibold">
             Info Pengiriman [{data?.kurir}]:
           </h5>
-          {data?.infoPengiriman && <div>{data?.infoPengiriman} </div>}
+          <p className="whitespace-pre-line">{data?.infoPengiriman} </p>
         </div>
       )}
     </div>
